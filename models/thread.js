@@ -12,8 +12,7 @@ const threadSchema = new Schema({
   },
   boardId: {
     type: String,
-    required: true,
-    default: 1,
+    required: true
   }
 }, { timestamps: true });
 

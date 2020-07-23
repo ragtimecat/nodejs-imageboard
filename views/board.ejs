@@ -6,17 +6,17 @@
     <h3>Section: <%= board.section %></h3>
     <p>This is a board about <%= board.subject %></p>
     <!-- <a href="/thread/create" class="create">Create Thread</a> -->
-    <form action="/thread/create" method="GET">
-      <input type="hidden" name="board" value="<%= board._id %>">
-      <input type="submit" value="Create Thread">
-    </form>
     <ul>
       <% if (threads.length > 0) { %><% threads.forEach(thread => { %>
-      <li><a href="thread/<%= thread._id %>"><%= thread.name %></a></li>
+      <li><a href="/thread/<%= thread._id %>"><%= thread.name %></a></li>
       <% }) %> <% } else { %>
       <p>There are no threads to display</p>
       <% } %>
     </ul>
+    <form action="/thread/create" method="GET">
+      <input type="hidden" name="board" value="<%= board._id %>">
+      <input type="submit" value="Create Thread">
+    </form>
   </div>
 </body>
 

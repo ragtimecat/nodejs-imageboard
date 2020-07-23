@@ -1,4 +1,5 @@
 const Board = require('../models/board');
+const threadController = require('./threadController');
 
 // get form for board creation
 const create_board_get = (req, res) => {
@@ -26,10 +27,17 @@ const create_board_post = (req, res) => {
 }
 
 // get existing board by id(name in future)
-const board_details_get = (req, res) => {
+const board_details_get = async (req, res) => {
   const id = req.params.id;
+  let threads = [];
+  // const threads = await threadController.get_threads_by_board_id(id);
+  threadController.get_threads_by_board_id(id)
+    .then(result => { threads = result })
+
   Board.findById(id)
-    .then(result => res.render('board', { title: "Imageboard", board: result, threads: [] }))
+    .then(result => {
+      res.render('board', { title: "Imageboard", board: result, threads })
+    })
     .catch(err => console.log(err));
 }
 
