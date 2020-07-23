@@ -1,0 +1,13 @@
+<%- include('./partials/head.ejs') %>
+
+<body>
+  <form action="/board/create" method="POST">
+    <label for="name">Name:</label>
+    <input id="name" name="name" type="text">
+    <label for="section">Section:</label>
+    <input id="section" name="section" type="text">
+    <input type="submit" value="Save">
+  </form>
+</body>
+
+<%- include('./partials/footer.ejs')  %>

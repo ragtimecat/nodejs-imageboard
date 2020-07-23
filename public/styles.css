@@ -1,0 +1,48 @@
+.content {
+  padding: 40px;
+}
+
+a.create {
+  text-decoration: none;
+  color: black;
+  font-size: 20px;
+  display: inline-block;
+  border: 2px solid black;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+a.create:hover {
+  color: white;
+  background-color: black;
+}
+
+form {
+  max-width: 300px;
+  margin: auto;
+  margin-top: 100px;
+}
+
+input[type=text] {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+input[type=submit] {
+  display: inline-block;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+li {
+  list-style-type: none;
+}
+
+footer {
+  text-align: center;
+  margin-top:300px;
+}
