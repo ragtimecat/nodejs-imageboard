@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Board = require('./models/board');
 const Thread = require('./models/thread');
+const boardRoutes = require('./routes/boardRoutes');
 const db = require('./config/db-connect.json');
 
 const app = express();
@@ -28,25 +29,9 @@ app.get('/', (req, res) => {
     .catch(err => console.log(err));
 })
 
-app.get('/board/create', (req, res) => {
-  res.render('create-board', { title: "Create Board" });
-})
+//board routes
+app.use('/board', boardRoutes);
 
-app.post('/board/create', (req, res) => {
-  const board = new Board(req.body);
-  board.save()
-    .then(result => {
-      res.redirect('/');
-    })
-    .catch(err => console.log(err));
-})
-
-app.get('/board/:id', (req, res) => {
-  const id = req.params.id;
-  Board.findById(id)
-    .then(result => res.render('board', { board: result, blogs: [], threads: [] }))
-    .catch(err => console.log(err));
-})
 
 app.get('/thread/create', (req, res) => {
   boardId = req.query.board;

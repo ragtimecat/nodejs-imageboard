@@ -1,0 +1,1 @@
+const Thread = require('../models/thread');
