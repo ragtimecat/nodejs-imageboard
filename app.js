@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Board = require('./models/board');
 const Thread = require('./models/thread');
 const boardRoutes = require('./routes/boardRoutes');
+const threadRoutes = require('./routes/threadRoutes');
 const db = require('./config/db-connect.json');
 
 const app = express();
@@ -32,18 +33,10 @@ app.get('/', (req, res) => {
 //board routes
 app.use('/board', boardRoutes);
 
+//thread routes
+app.use('/thread', threadRoutes);
 
-app.get('/thread/create', (req, res) => {
-  boardId = req.query.board;
-  res.render('create-thread', { title: "Create a thread", boardId })
-})
-
-app.post('/thread/create', (req, res) => {
-  const thread = new Thread(req.body);
-  thread.save()
-    .then(result => {
-      console.log(result);
-      res.redirect(`/thread/${result._id}`);
-    })
-    .catch(err => console.log(err));
+// 404
+app.use('/', (req, res) => {
+  res.render('404', { title: "Error 404" })
 })

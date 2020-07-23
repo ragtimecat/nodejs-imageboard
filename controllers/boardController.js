@@ -8,18 +8,28 @@ const create_board_get = (req, res) => {
 // create new board
 const create_board_post = (req, res) => {
   const board = new Board(req.body);
-  board.save()
+  Board.find({ name: req.body.name })
     .then(result => {
-      res.redirect('/');
+      if (result.length > 0) {
+        res.render('create-board', { title: "error", message: "There is a board with such name already" })
+        // throw new Error('there is a document with such name already');
+      } else {
+        board.save()
+          .then(result => {
+            res.redirect('/');
+          })
+          .catch(err => console.log(err));
+      }
     })
     .catch(err => console.log(err));
+
 }
 
 // get existing board by id(name in future)
 const board_details_get = (req, res) => {
   const id = req.params.id;
   Board.findById(id)
-    .then(result => res.render('board', { board: result, threads: [] }))
+    .then(result => res.render('board', { title: "Imageboard", board: result, threads: [] }))
     .catch(err => console.log(err));
 }
 

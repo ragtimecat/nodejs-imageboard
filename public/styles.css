@@ -2,6 +2,26 @@
   padding: 40px;
 }
 
+.error {
+  text-align: center;
+}
+
+.button {
+  text-decoration: none;
+  color: crimson;
+  font-size: 18px;
+  display: inline-block;
+  border: 2px solid crimson;
+  padding: 4px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.button:hover {
+  color: white;
+  background-color: crimson;
+}
+
 a.create {
   text-decoration: none;
   color: black;

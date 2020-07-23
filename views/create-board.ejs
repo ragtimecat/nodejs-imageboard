@@ -1,13 +1,23 @@
 <%- include('./partials/head.ejs') %>
 
 <body>
-  <form action="/board/create" method="POST">
-    <label for="name">Name:</label>
-    <input id="name" name="name" type="text">
-    <label for="section">Section:</label>
-    <input id="section" name="section" type="text">
-    <input type="submit" value="Save">
-  </form>
+  <div class="content">
+    <form action="/board/create" method="POST">
+      <label for="name">Name:</label>
+      <input id="name" name="name" type="text">
+      <label for="section">Section:</label>
+      <input id="section" name="section" type="text">
+      <input type="submit" value="Save">
+    </form>
+    <% if (locals.message) { %>
+    <div class="error">
+      <p> <%= locals.message %></p>
+      <a href="/">Go Back</a>
+    </div>
+
+    <% } %>
+  </div>
+
 </body>
 
 <%- include('./partials/footer.ejs')  %>

@@ -1,18 +1,20 @@
 <%- include('./partials/head.ejs') %>
 
 <body>
-  <h1>Welcome to the main page anon</h1>
-  <p>Pick a board you like and have fun</p>
+  <div class="content">
+    <h1>Welcome to the main page anon</h1>
+    <p>Pick a board you like and have fun</p>
 
-  <ul>
-    <% boards.forEach(board => { %>
-    <li>
-      <a href="/board/<%= board._id %>"><%= board.name %></a>
-    </li>
-    <% }) %>
-  </ul>
-  <p>Or Create One</p>
-  <a class="create-board" href="/board/create">Create</a>
+    <ul>
+      <% boards.forEach(board => { %>
+      <li>
+        <a href="/board/<%= board._id %>"><%= board.name %></a>
+      </li>
+      <% }) %>
+    </ul>
+    <p>Or Create One</p>
+    <a class="create-board" href="/board/create">Create</a>
+  </div>
 </body>
 
 <%- include('./partials/footer.ejs') %>
