@@ -1,4 +1,5 @@
 const Thread = require('../models/thread');
+const messageController = require('./messageController');
 
 // get a form for thread creation with boardId as a parameter
 const create_thread_get = (req, res) => {
@@ -12,14 +13,19 @@ const create_thread_post = (req, res) => {
   thread.save()
     .then(result => {
       console.log(result);
+      messageController.new_message_post(result._id, req.body.text);
       res.redirect(`/thread/${result._id}`);
     })
     .catch(err => console.log(err));
 }
 
+//get a single thread by id
 const get_thread_by_id = (req, res) => {
+  let messages = [];
+  messageController.get_messages_by_thread_id(req.params.id)
+    .then(result => (messages = result));
   Thread.findById(req.params.id)
-    .then(result => res.render('thread', { title: "imageboard", thread: result }))
+    .then(result => res.render('thread', { title: "imageboard", thread: result, messages }))
     .catch(err => console.log(err));
 }
 
