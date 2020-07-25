@@ -13,7 +13,11 @@ const threadSchema = new Schema({
   board: {
     type: Schema.Types.ObjectId,
     ref: "Board"
-  }
+  },
+  messages: [{
+    type: Schema.Types.ObjectId,
+    ref: "Message"
+  }]
 }, { timestamps: true });
 
 const Thread = mongoose.model('Thread', threadSchema);

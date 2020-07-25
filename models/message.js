@@ -9,6 +9,10 @@ const messageSchema = new Schema({
   text: {
     type: String,
     required: true
+  },
+  thread: {
+    type: Schema.Types.ObjectId,
+    ref: "Thread"
   }
 }, { timestamps: true });
 
