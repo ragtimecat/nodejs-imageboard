@@ -8,13 +8,13 @@ const create_board_get = (req, res) => {
 
 // create new board
 const create_board_post = (req, res) => {
-  const board = new Board(req.body);
   Board.find({ name: req.body.name })
     .then(result => {
       if (result.length > 0) {
         res.render('create-board', { title: "error", message: "There is a board with such name already" })
         // throw new Error('there is a document with such name already');
       } else {
+        const board = new Board(req.body);
         board.save()
           .then(result => {
             res.redirect('/');
@@ -29,14 +29,10 @@ const create_board_post = (req, res) => {
 // get existing board by id(name in future)
 const board_details_get = async (req, res) => {
   const id = req.params.id;
-  let threads = [];
-  // const threads = await threadController.get_threads_by_board_id(id);
-  threadController.get_threads_by_board_id(id)
-    .then(result => { threads = result })
-
-  Board.findById(id)
+  Board.findById(id).populate('threads')
     .then(result => {
-      res.render('board', { title: "Imageboard", board: result, threads })
+      console.log(result.threads);
+      res.render('board', { title: "Imageboard", board: result })
     })
     .catch(err => console.log(err));
 }

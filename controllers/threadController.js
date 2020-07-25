@@ -1,18 +1,26 @@
 const Thread = require('../models/thread');
 const messageController = require('./messageController');
+const Board = require('../models/board');
 
 // get a form for thread creation with boardId as a parameter
 const create_thread_get = (req, res) => {
-  boardId = req.query.board;
-  res.render('create-thread', { title: "Create a thread", boardId })
+  board = req.query.board;
+  res.render('create-thread', { title: "Create a thread", board })
 }
+
 
 // create new thread
 const create_thread_post = (req, res) => {
   const thread = new Thread(req.body);
+  console.log(req.body);
   thread.save()
     .then(result => {
-      console.log(result);
+      console.log();
+      Board.findByIdAndUpdate(req.body.board, { $addToSet: { threads: result._id } })
+        .then(
+          result => console.log(result)
+        )
+        .catch(err => console.log(err));
       messageController.new_message_post(result._id, req.body.text);
       res.redirect(`/thread/${result._id}`);
     })
@@ -23,7 +31,7 @@ const create_thread_post = (req, res) => {
 const get_thread_by_id = (req, res) => {
   let messages = [];
   messageController.get_messages_by_thread_id(req.params.id)
-    .then(result => (messages = result));
+    .then(result => (message = result));
   Thread.findById(req.params.id)
     .then(result => res.render('thread', { title: "imageboard", thread: result, messages }))
     .catch(err => console.log(err));

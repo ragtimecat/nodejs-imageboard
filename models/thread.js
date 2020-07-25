@@ -10,9 +10,9 @@ const threadSchema = new Schema({
     type: String,
     required: true
   },
-  boardId: {
-    type: String,
-    required: true
+  board: {
+    type: Schema.Types.ObjectId,
+    ref: "Board"
   }
 }, { timestamps: true });
 

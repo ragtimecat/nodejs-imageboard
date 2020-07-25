@@ -10,7 +10,11 @@ const boardSchema = new Schema({
   section: {
     type: String,
     required: true
-  }
+  },
+  threads: [{
+    type: Schema.Types.ObjectId,
+    ref: "Thread"
+  }]
 }, { timestamps: true });
 
 const Board = mongoose.model('Board', boardSchema);
