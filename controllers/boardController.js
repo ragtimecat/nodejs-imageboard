@@ -3,6 +3,7 @@ const threadController = require('./threadController');
 
 // get form for board creation
 const create_board_get = (req, res) => {
+  console.log(res.locals);
   res.render('create-board', { title: "Create Board" });
 }
 
@@ -28,10 +29,10 @@ const create_board_post = (req, res) => {
 
 // get existing board by id(name in future)
 const board_details_get = async (req, res) => {
+  console.log(res.locals);
   const id = req.params.id;
   Board.findById(id).populate('threads')
     .then(result => {
-      console.log(result.threads);
       res.render('board', { title: "Imageboard", board: result })
     })
     .catch(err => console.log(err));

@@ -21,8 +21,19 @@ app.use(express.urlencoded({ extended: true }));
 //view engine
 app.set('view engine', 'ejs');
 
+app.use(async (req, res, next) => {
+  res.locals.boards = await Board.find();
+  // Board.find()
+  //   .then(result => {
+  //     res.locals.boards = result;
+  //   })
+  //   .catch(err => console.log(err));
+  next();
+});
+
 //paths
 app.get('/', (req, res) => {
+  console.log(res.locals);
   Board.find()
     .then(result => {
       res.render('index', { title: "main page", boards: result })
@@ -35,6 +46,8 @@ app.use('/board', boardRoutes);
 
 //thread routes
 app.use('/thread', threadRoutes);
+
+
 
 // 404
 app.use('/', (req, res) => {

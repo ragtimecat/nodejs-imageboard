@@ -12,13 +12,11 @@ const create_thread_get = (req, res) => {
 // create new thread
 const create_thread_post = (req, res) => {
   const thread = new Thread(req.body);
-  console.log(req.body);
   thread.save()
     .then(result => {
-      console.log();
       Board.findByIdAndUpdate(req.body.board, { $addToSet: { threads: result._id } })
         .then(
-          result => console.log(result)
+          result => { return result }
         )
         .catch(err => console.log(err));
       messageController.new_message_post(result._id, req.body.text);

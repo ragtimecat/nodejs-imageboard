@@ -1,0 +1,18 @@
+<nav>
+  <div class="site-title">
+    <a href="/">
+      <h1>The Board</h1>
+    </a>
+    <a href="/board/create">
+      <h3>Create Board</h3>
+    </a>
+  </div>
+  <ul class="boards">
+    <li>Boards:</li>
+    <% if (typeof boards !== 'undefined' && boards.length > 0) { %><% boards.forEach(board => { %>
+    <li>
+      <a href="/board/<%= board._id %>"><%= board.name %></a>
+    </li>
+    <% }) %> <% } %>
+  </ul>
+</nav>
