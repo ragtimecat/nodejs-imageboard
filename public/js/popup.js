@@ -45,9 +45,34 @@ function dragElement(element) {
 
 //fetch
 const button = document.querySelector('form.message>input[type=submit]');
-console.log(button);
+const textarea = document.querySelector('form.message>textarea');
+const error = document.getElementById('error-message');
 
-button.addEventListener('click', (e) => {
+button.addEventListener('click', async (e) => {
   e.preventDefault();
-  console.log('im here');
+  //thrid element of array, obtained through separating the row by '/'
+  const thread = window.location.pathname.split('/')[2];
+  const text = textarea.value;
+  if (text == '') {
+    error.innerHTML = 'There is no data to send';
+    error.style.display = 'block';
+  } else {
+    error.style.display = 'none';
+    const data = {
+      thread,
+      text
+    };
+    fetch('/message/create/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+
+  }
+
 })

@@ -19,7 +19,7 @@ const create_thread_post = (req, res) => {
           result => { return result }
         )
         .catch(err => console.log(err));
-      messageController.new_message_post(result._id, req.body.text);
+      messageController.first_message_in_thread(result._id, req.body.text);
       res.redirect(`/thread/${result._id}`);
     })
     .catch(err => console.log(err));
@@ -27,11 +27,9 @@ const create_thread_post = (req, res) => {
 
 //get a single thread by id
 const get_thread_by_id = (req, res) => {
-  let messages = [];
-  messageController.get_messages_by_thread_id(req.params.id)
-    .then(result => (message = result));
-  Thread.findById(req.params.id)
-    .then(result => res.render('thread', { title: "imageboard", thread: result, messages }))
+
+  Thread.findById(req.params.id).populate('messages')
+    .then(result => res.render('thread', { title: "imageboard", thread: result }))
     .catch(err => console.log(err));
 }
 

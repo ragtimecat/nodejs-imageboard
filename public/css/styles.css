@@ -87,6 +87,13 @@ ul.boards {
   text-align: center;
 }
 
+#message-div > #error-message {
+  display: none;
+  padding: 5px 3px;
+  color:white;
+  background-color: red;
+}
+
 #message-divheader {
   padding: 10px;
   cursor: move;
@@ -111,4 +118,8 @@ form.message > input[type=submit] {
   cursor: pointer;
   font-weight: 700;
   width: 100%;
+}
+
+.message-box {
+  border-bottom: 1px solid grey;
 }

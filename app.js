@@ -4,7 +4,9 @@ const Board = require('./models/board');
 const Thread = require('./models/thread');
 const boardRoutes = require('./routes/boardRoutes');
 const threadRoutes = require('./routes/threadRoutes');
+const messageRoutes = require('./routes/messageRoutes');
 const db = require('./config/db-connect.json');
+const bodyParser = require('body-parser')
 
 const app = express();
 
@@ -17,6 +19,7 @@ mongoose.connect(db.dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
 //static files
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 //view engine
 app.set('view engine', 'ejs');
@@ -46,6 +49,9 @@ app.use('/board', boardRoutes);
 
 //thread routes
 app.use('/thread', threadRoutes);
+
+//message routes
+app.use('/message', messageRoutes);
 
 
 
