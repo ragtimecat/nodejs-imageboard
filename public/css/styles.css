@@ -42,7 +42,8 @@ a.create:hover {
   background-color: black;
 }
 
-form {
+form.board,
+form.thread {
   max-width: 300px;
   margin: auto;
   margin-top: 100px;
@@ -75,4 +76,39 @@ footer {
 ul.boards {
   padding-bottom: 10px;
   border-bottom: 1px solid black;
+}
+
+#message-div {
+  position: absolute;
+  width: 300px;
+  z-index: 9;
+  background-color: #f1f1f1;
+  border: 1px solid #d3d3d3;
+  text-align: center;
+}
+
+#message-divheader {
+  padding: 10px;
+  cursor: move;
+  z-index: 10;
+  background-color: #2196F3;
+  color: #fff;
+}
+
+textarea {
+  width: 99%;
+  margin: auto;
+  padding: 0;
+  display: block;
+}
+
+form.message {
+  margin: 10px 10px;
+}
+
+form.message > input[type=submit] {
+  margin-top: 5px;
+  cursor: pointer;
+  font-weight: 700;
+  width: 100%;
 }

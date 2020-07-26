@@ -7,6 +7,15 @@
     <p><%= thread.text %></p>
   </div>
   <%= messages %>
+  <div id="message-div">
+    <div id="message-divheader">Send Message</div>
+    <form class="message" action="message/create" method="POST">
+      <textarea placeholder="Don't be shy, express yourself..." name="message" id="message" cols="30"
+        rows="10"></textarea>
+      <input type="hidden" name="thread" value="<%= thread._id %>">
+      <input type="submit" value="Send">
+    </form>
+  </div>
   <script type="text/javascript" src="/js/popup.js"></script>
 </body>
 
