@@ -29,7 +29,6 @@ const create_board_post = (req, res) => {
 
 // get existing board by id(name in future)
 const board_details_get = async (req, res) => {
-  console.log(res.locals);
   const id = req.params.id;
   Board.findById(id).populate('threads')
     .then(result => {

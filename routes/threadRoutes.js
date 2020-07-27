@@ -12,4 +12,5 @@ router.post('/create', threadController.create_thread_post);
 //get single thread
 router.get('/:id', threadController.get_thread_by_id);
 
+
 module.exports = router;

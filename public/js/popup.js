@@ -1,6 +1,8 @@
 // Message div
 // Make the DIV element draggable:
-dragElement(document.getElementById("message-div"));
+const messageDiv = document.getElementById("message-div");
+const closeMessage = document.querySelector(".close-message");
+dragElement(messageDiv);
 
 function dragElement(element) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -43,12 +45,46 @@ function dragElement(element) {
   }
 }
 
+closeMessage.addEventListener('click', (e) => {
+  messageDiv.style.display = 'none';
+})
+
 //fetch
 const button = document.querySelector('form.message>input[type=submit]');
 const textarea = document.querySelector('form.message>textarea');
 const error = document.getElementById('error-message');
+const reply = document.getElementById('reply');
+const deleteMessage = document.querySelectorAll(".delete-message");
 
-button.addEventListener('click', async (e) => {
+reply.addEventListener('click', (e) => {
+  e.preventDefault();
+  messageDiv.style.display = 'block';
+});
+
+deleteMessage.forEach(delMessage => {
+  delMessage.addEventListener('click', (e) => {
+    const id = e.target.parentElement.id;
+    const data = {
+      "id": id
+    }
+    fetch('/message/:id', {
+      method: "DELETE",
+      headers: {
+        'Accept': 'appliaction/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(result => {
+        e.target.parentElement.parentElement.parentElement.remove();
+      })
+      .catch(err => console.log(err));
+  })
+})
+
+
+
+button.addEventListener('click', (e) => {
   e.preventDefault();
   //thrid element of array, obtained through separating the row by '/'
   const thread = window.location.pathname.split('/')[2];
@@ -57,6 +93,7 @@ button.addEventListener('click', async (e) => {
     error.innerHTML = 'There is no data to send';
     error.style.display = 'block';
   } else {
+    button.setAttribute('disabled', true);
     error.style.display = 'none';
     const data = {
       thread,
@@ -65,14 +102,19 @@ button.addEventListener('click', async (e) => {
     fetch('/message/create/', {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data)
     })
-      .then(res => console.log(res))
+      .then(async (res) => {
+        button.removeAttribute('disabled');
+        let resp = await res.json();
+        console.log(resp);
+
+      })
       .catch(err => console.log(err));
 
   }
 
-})
+});

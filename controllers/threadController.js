@@ -38,9 +38,21 @@ const get_threads_by_board_id = (id) => {
   return Thread.find({ boardId: id }).exec();
 }
 
+const find_by_id_and_update = (threadId, messageId) => {
+  return Thread.findByIdAndUpdate(threadId, { $addToSet: { messages: messageId } })
+    .then(result => { return result })
+    .catch(err => console.log(err));
+}
+
+const new_func = () => {
+  return 4;
+}
+
 module.exports = {
   create_thread_get,
   create_thread_post,
   get_threads_by_board_id,
-  get_thread_by_id
+  get_thread_by_id,
+  find_by_id_and_update,
+  new_func
 }

@@ -79,6 +79,7 @@ ul.boards {
 }
 
 #message-div {
+  display: none;
   position: absolute;
   width: 300px;
   z-index: 9;
@@ -95,11 +96,19 @@ ul.boards {
 }
 
 #message-divheader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 10px;
   cursor: move;
   z-index: 10;
   background-color: #2196F3;
   color: #fff;
+}
+
+#message-divheader > .close-cross {
+  font-size: 40px;
+  cursor: pointer;
 }
 
 textarea {
@@ -121,5 +130,15 @@ form.message > input[type=submit] {
 }
 
 .message-box {
-  border-bottom: 1px solid grey;
+  border: 1px solid grey;
+  margin: 5px 0;
+}
+
+.delete-message {
+  float: right;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 600;
+  color: rgb(190, 40, 40);
+  margin-right: 5px;
 }

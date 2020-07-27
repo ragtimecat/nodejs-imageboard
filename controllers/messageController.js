@@ -1,5 +1,6 @@
 const Message = require('../models/message');
 const Thread = require('../models/thread');
+const threadController = require('./threadController');
 
 // get form for board creation
 const get_messages_by_thread_id = (id) => {
@@ -25,6 +26,17 @@ const new_message_post = (req, res) => {
       Thread.findByIdAndUpdate(req.body.thread, { $addToSet: { messages: result._id } })
         .then(result => { return result })
         .catch(err => console.log(err));
+      res.json(result);
+    })
+    .catch(err => console.log(err));
+}
+
+const message_delete = (req, res) => {
+  console.log(req.body.id);
+  Message.findByIdAndDelete(req.body.id)
+    .then(result => {
+      console.log(result);
+      res.send({ 'success': true });
     })
     .catch(err => console.log(err));
 }
@@ -32,5 +44,6 @@ const new_message_post = (req, res) => {
 module.exports = {
   get_messages_by_thread_id,
   first_message_in_thread,
-  new_message_post
+  new_message_post,
+  message_delete
 }
