@@ -17,17 +17,18 @@
         <input type="submit" value="Send">
       </form>
     </div>
-    <% thread.messages.forEach(message => { %>
-    <div class="message-box">
-      <div>
+    <div id="messages">
+      <% thread.messages.forEach(message => { %>
+      <div class="message-box">
         <div class="message-data" id="<%= message._id %>">Date: <%= message.createdAt %><button class="delete-message">
             &times
           </button>
         </div>
+        <p><%= message.text %></p>
       </div>
-      <p><%= message.text %></p>
+      <% }) %>
     </div>
-    <% }) %>
+
   </div>
   <script type="text/javascript" src="/js/popup.js"></script>
 </body>

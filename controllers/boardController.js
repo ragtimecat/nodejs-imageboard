@@ -3,7 +3,6 @@ const threadController = require('./threadController');
 
 // get form for board creation
 const create_board_get = (req, res) => {
-  console.log(res.locals);
   res.render('create-board', { title: "Create Board" });
 }
 

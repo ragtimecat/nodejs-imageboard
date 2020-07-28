@@ -36,7 +36,6 @@ app.use(async (req, res, next) => {
 
 //paths
 app.get('/', (req, res) => {
-  console.log(res.locals);
   Board.find()
     .then(result => {
       res.render('index', { title: "main page", boards: result })

@@ -32,13 +32,15 @@ const new_message_post = (req, res) => {
 }
 
 const message_delete = (req, res) => {
-  console.log(req.body.id);
   Message.findByIdAndDelete(req.body.id)
     .then(result => {
       console.log(result);
-      res.send({ 'success': true });
+      res.status(200).send({ payload: result });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log(err);
+      res.status(500).send({ 'error': err });
+    });
 }
 
 module.exports = {

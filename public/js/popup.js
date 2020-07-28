@@ -61,26 +61,57 @@ reply.addEventListener('click', (e) => {
   messageDiv.style.display = 'block';
 });
 
-deleteMessage.forEach(delMessage => {
-  delMessage.addEventListener('click', (e) => {
-    const id = e.target.parentElement.id;
-    const data = {
-      "id": id
-    }
-    fetch('/message/:id', {
-      method: "DELETE",
-      headers: {
-        'Accept': 'appliaction/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(result => {
-        e.target.parentElement.parentElement.parentElement.remove();
-      })
-      .catch(err => console.log(err));
+const createMessageElement = (id, date, text) => {
+  // <div class="message-box">
+  //       <div class="message-data" id="<%= message._id %>">Date: <%= message.createdAt %><button class="delete-message">
+  //           &times
+  //         </button>
+  //       </div>
+  //       <p><%= message.text %></p>
+  //     </div>
+  let newDiv = document.createElement('div');
+  newDiv.classList.add('message-box');
+  const innerDiv = document.createElement('div');
+  innerDiv.classList.add('message-data');
+  innerDiv.setAttribute('id', id);
+  const button = document.createElement('button');
+  button.classList.add('delete-message');
+  button.textContent = '×';
+  innerDiv.textContent = `Date: ${date}`;
+  innerDiv.appendChild(button);
+  newDiv.appendChild(innerDiv);
+  const p = document.createElement('p');
+  p.textContent = `${text}`;
+  newDiv.appendChild(p);
+  return newDiv;
+}
+
+const deleteEvent = (e) => {
+  const id = e.target.parentElement.id;
+  console.log(e.target);
+  const data = {
+    "id": id
+  }
+  fetch('/message/:id', {
+    method: "DELETE",
+    headers: {
+      'Accept': 'appliaction/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
   })
+    .then(async (result) => {
+      e.target.parentElement.parentElement.remove();
+      const resp = await result.json();
+      console.log(resp);
+    })
+    .catch(err => console.log(err));
+}
+
+deleteMessage.forEach((delMessage) => {
+  delMessage.addEventListener('click', e => deleteEvent(e));
 })
+
 
 
 
@@ -109,9 +140,12 @@ button.addEventListener('click', (e) => {
     })
       .then(async (res) => {
         button.removeAttribute('disabled');
+        textarea.value = '';
         let resp = await res.json();
-        console.log(resp);
-
+        const newMessage = createMessageElement(resp._id, resp.createdAt, resp.text);
+        document.getElementById('messages').appendChild(newMessage);
+        const deleteButton = document.getElementById(resp._id).querySelector('.delete-message');
+        deleteButton.addEventListener('click', e => deleteEvent(e));
       })
       .catch(err => console.log(err));
 
