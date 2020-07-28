@@ -155,3 +155,8 @@ form.message > input[type=submit] {
   cursor: pointer;
   color: #444;
 }
+
+.incoming-replies {
+  display: inline;
+  font-size: 12px;
+}

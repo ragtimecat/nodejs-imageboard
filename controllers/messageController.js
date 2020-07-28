@@ -22,11 +22,18 @@ const first_message_in_thread = (thread, text) => {
 
 // create new message 
 const new_message_post = (req, res) => {
+  console.log(req.body);
   const replies = replies_parse(req.body.text);
   req.body.outgoingReplies = replies;
+  req.body.text = wrapRepliesWithLinks(req.body.text);
   const message = new Message(req.body);
   message.save()
     .then(result => {
+      replies.forEach(reply => {
+        Message.findByIdAndUpdate(reply, { $addToSet: { incomingReplies: result._id } })
+          .then(result => { return result })
+          .catch(err => console.log(err));
+      })
       Thread.findByIdAndUpdate(req.body.thread, { $addToSet: { messages: result._id } })
         .then(result => { return result })
         .catch(err => console.log(err));
@@ -50,10 +57,24 @@ const message_delete = (req, res) => {
     });
 }
 
+const wrapRepliesWithLinks = (text) => {
+  text = text.replace(/>>[0-9a-z]*/gm, (match) => {
+    resultLink = match.replace(/>>/, '');
+    newLink = `<a href="#${resultLink}">${match}</a>`;
+    return newLink;
+  });
+  return text;
+}
+
 //
 const replies_parse = (text) => {
   const regExp = />>[0-9a-z]*/gm;
-  return text.match(regExp);
+  resultArray = text.match(regExp);
+  resultArray.forEach((reply, i, arr) => {
+    arr[i] = arr[i].replace(/>>/g, '');
+    arr[i] = Buffer.from(arr[i], 'utf-8');
+  })
+  return resultArray;
 }
 
 module.exports = {

@@ -12,6 +12,9 @@ const messageSchema = new Schema({
   },
   outgoingReplies: [{
     type: String
+  }],
+  incomingReplies: [{
+    type: String
   }]
 }, { timestamps: true });
 

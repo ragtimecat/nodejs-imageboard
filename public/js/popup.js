@@ -1,3 +1,25 @@
+// const wrapRepliesWithLinks = (text) => {
+//   text = text.replace(/>>[0-9a-z]*/gm, (match) => {
+//     resultLink = match.replace(/>>/, '');
+//     const newLink = document.createElement('a');
+//     newLink.setAttribute('href', `#${resultLink}`);
+//     // console.log(newLink);
+//     newLink.innerText = match;
+//     console.log(newLink);
+//     return newLink;
+//   });
+//   return text;
+// }
+
+// const allMessages = document.querySelectorAll('.message-text');
+// console.log(allMessages);
+// allMessages.forEach(message => {
+//   wrapRepliesWithLinks(message.innerText);
+//   // message.innerHTML = wrapRepliesWithLinks(message.innerText);
+//   // console.log(message.innerText);
+// })
+
+
 // Message div
 // Make the DIV element draggable:
 const messageDiv = document.getElementById("message-div");
@@ -62,22 +84,19 @@ reply.addEventListener('click', (e) => {
 });
 
 const createMessageElement = (id, date, text) => {
-  // <div class="message-box">
-  //       <div class="message-data" id="<%= message._id %>">Date: <%= message.createdAt %><button class="delete-message">
-  //           &times
-  //         </button>
-  //       </div>
-  //       <p><%= message.text %></p>
-  //     </div>
   let newDiv = document.createElement('div');
   newDiv.classList.add('message-box');
   const innerDiv = document.createElement('div');
   innerDiv.classList.add('message-data');
   innerDiv.setAttribute('id', id);
+  const postId = document.createElement('div');
+  postId.classList.add('post-id');
+  postId.textContent = `№${id}`;
   const button = document.createElement('button');
   button.classList.add('delete-message');
   button.textContent = '×';
-  innerDiv.textContent = `Date: ${date}`;
+  innerDiv.textContent = `Date: ${date} `;
+  innerDiv.appendChild(postId);
   innerDiv.appendChild(button);
   newDiv.appendChild(innerDiv);
   const p = document.createElement('p');
@@ -112,11 +131,34 @@ deleteMessage.forEach((delMessage) => {
   delMessage.addEventListener('click', e => deleteEvent(e));
 })
 
+// replies
+const replies = document.querySelectorAll('.post-id');
+
+//add reply func
+const addReplyEvent = (e) => {
+  console.log(reply);
+  const id = e.target.parentElement.id;
+  messageDiv.style.display = 'block';
+  const quote = `>>${id}\r\n`;
+  if (textarea.value == '') {
+    textarea.value += quote;
+  } else {
+    textarea.value += `\r\n${quote}`;
+  }
+  textarea.focus();
+}
+
+replies.forEach(reply => {
+  reply.addEventListener('click', e => addReplyEvent(e));
+})
+
 button.addEventListener('click', (e) => {
   e.preventDefault();
   //thrid element of array, obtained through separating the row by '/'
   const thread = window.location.pathname.split('/')[2];
-  const text = textarea.value;
+  let text = textarea.value;
+  //wrap reply links with <a> tag with href
+  // text = wrapRepliesWithLinks(text);
   if (text == '') {
     error.innerHTML = 'There is no data to send';
     error.style.display = 'block';
@@ -127,6 +169,7 @@ button.addEventListener('click', (e) => {
       thread,
       text
     };
+    console.log(data);
     fetch('/message/create/', {
       method: "POST",
       headers: {
@@ -141,6 +184,7 @@ button.addEventListener('click', (e) => {
         let resp = await res.json();
         const newMessage = createMessageElement(resp._id, resp.createdAt, resp.text);
         document.getElementById('messages').appendChild(newMessage);
+        newMessage.querySelector('.post-id').addEventListener('click', e => addReplyEvent(e));
         const deleteButton = document.getElementById(resp._id).querySelector('.delete-message');
         deleteButton.addEventListener('click', e => deleteEvent(e));
       })
@@ -149,18 +193,5 @@ button.addEventListener('click', (e) => {
   }
 });
 
-// replies
-const replies = document.querySelectorAll('.post-id');
-replies.forEach(reply => {
-  reply.addEventListener('click', e => {
-    const id = e.target.parentElement.id;
-    messageDiv.style.display = 'block';
-    const quote = `>>${id}\r\n`;
-    if (textarea.value == '') {
-      textarea.value += quote;
-    } else {
-      textarea.value += `\r\n${quote}`;
-    }
-    textarea.focus();
-  })
-})
+
+
