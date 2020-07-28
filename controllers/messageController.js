@@ -19,18 +19,25 @@ const first_message_in_thread = (thread, text) => {
     .catch(err => console.log(err));
 }
 
+
+// create new message 
 const new_message_post = (req, res) => {
+  const replies = replies_parse(req.body.text);
+  req.body.outgoingReplies = replies;
   const message = new Message(req.body);
   message.save()
     .then(result => {
       Thread.findByIdAndUpdate(req.body.thread, { $addToSet: { messages: result._id } })
         .then(result => { return result })
         .catch(err => console.log(err));
+      console.log(result);
       res.json(result);
     })
     .catch(err => console.log(err));
 }
 
+
+//delete message
 const message_delete = (req, res) => {
   Message.findByIdAndDelete(req.body.id)
     .then(result => {
@@ -41,6 +48,12 @@ const message_delete = (req, res) => {
       console.log(err);
       res.status(500).send({ 'error': err });
     });
+}
+
+//
+const replies_parse = (text) => {
+  const regExp = />>[0-9a-z]*/gm;
+  return text.match(regExp);
 }
 
 module.exports = {

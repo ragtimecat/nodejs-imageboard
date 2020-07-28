@@ -132,6 +132,13 @@ form.message > input[type=submit] {
 .message-box {
   border: 1px solid grey;
   margin: 5px 0;
+  padding: 5px;
+}
+
+.message-data {
+  font-size: 14px;
+  text-transform: lowercase;
+  color: #888;
 }
 
 .delete-message {
@@ -141,4 +148,10 @@ form.message > input[type=submit] {
   font-weight: 600;
   color: rgb(190, 40, 40);
   margin-right: 5px;
+}
+
+.post-id {
+  display: inline;
+  cursor: pointer;
+  color: #444;
 }

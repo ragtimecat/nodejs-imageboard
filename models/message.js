@@ -9,7 +9,10 @@ const messageSchema = new Schema({
   thread: {
     type: Schema.Types.ObjectId,
     ref: "Thread"
-  }
+  },
+  outgoingReplies: [{
+    type: String
+  }]
 }, { timestamps: true });
 
 const Message = mongoose.model('Message', messageSchema);

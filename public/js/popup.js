@@ -112,9 +112,6 @@ deleteMessage.forEach((delMessage) => {
   delMessage.addEventListener('click', e => deleteEvent(e));
 })
 
-
-
-
 button.addEventListener('click', (e) => {
   e.preventDefault();
   //thrid element of array, obtained through separating the row by '/'
@@ -150,5 +147,20 @@ button.addEventListener('click', (e) => {
       .catch(err => console.log(err));
 
   }
-
 });
+
+// replies
+const replies = document.querySelectorAll('.post-id');
+replies.forEach(reply => {
+  reply.addEventListener('click', e => {
+    const id = e.target.parentElement.id;
+    messageDiv.style.display = 'block';
+    const quote = `>>${id}\r\n`;
+    if (textarea.value == '') {
+      textarea.value += quote;
+    } else {
+      textarea.value += `\r\n${quote}`;
+    }
+    textarea.focus();
+  })
+})

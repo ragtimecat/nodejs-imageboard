@@ -20,7 +20,9 @@
     <div id="messages">
       <% thread.messages.forEach(message => { %>
       <div class="message-box">
-        <div class="message-data" id="<%= message._id %>">Date: <%= message.createdAt %><button class="delete-message">
+        <div class="message-data" id="<%= message._id %>">Date: <%= message.createdAt %> <div class="post-id"
+            post-id="#<%=message._id %>">
+            №<%= message._id %></div><button class="delete-message">
             &times
           </button>
         </div>
