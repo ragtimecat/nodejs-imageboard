@@ -7,16 +7,24 @@
     <h3>Section: <%= board.section %></h3>
     <p>This is a board about <%= board.subject %></p>
     <!-- <a href="/thread/create" class="create">Create Thread</a> -->
-    <ul>
-      <% if (board.threads.length > 0) { %><% board.threads.forEach(thread => { %>
-      <li><a href="/thread/<%= thread._id %>"><%= thread.name %></a></li>
-      <% }) %> <% } else { %>
-      <p>There are no threads to display</p>
-      <% } %>
-    </ul>
     <div class="center-link">
       <a class="button" href="/thread/create/?board=<%= board._id %>">Create Thread</a>
     </div>
+    <div class="threads">
+      <ul>
+        <% if (board.threads.length > 0) { %><% board.threads.forEach(thread => { %>
+        <div class="thread-box">
+          <li><a href="/thread/<%= thread._id %>"><%= thread.name %></a><span> <%= thread.createdAt %></span>
+            <a href="/thread/<%= thread._id %>">Reply</a></li>
+          <p class="thread-title-message"><%= thread.text %></p>
+        </div>
+        <% }) %> <% } else { %>
+        <p>There are no threads to display</p>
+        <% } %>
+      </ul>
+    </div>
+
+
   </div>
 </body>
 

@@ -23,7 +23,6 @@ const first_message_in_thread = (thread, text) => {
 // create new message 
 const new_message_post = (req, res) => {
   const replies = replies_parse(req.body.text);
-  console.log('replies' + replies);
   req.body.outgoingReplies = replies;
   req.body.text = wrapRepliesWithLinks(req.body.text);
   const message = new Message(req.body);
@@ -39,7 +38,6 @@ const new_message_post = (req, res) => {
       Thread.findByIdAndUpdate(req.body.thread, { $addToSet: { messages: result._id } })
         .then(result => { return result })
         .catch(err => console.log(err));
-      console.log(result);
       res.json(result);
     })
     .catch(err => console.log(err));

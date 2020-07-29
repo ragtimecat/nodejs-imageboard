@@ -1,3 +1,13 @@
+body {
+  font-family: 'Lato', sans-serif;
+}
+
+a {
+  text-decoration: none;
+  font-weight: 500;
+  color: red;
+}
+
 .content {
   padding: 40px;
 }
@@ -13,10 +23,10 @@
 
 .button {
   text-decoration: none;
-  color: crimson;
+  color: red;
   font-size: 18px;
   display: inline-block;
-  border: 2px solid crimson;
+  border: 2px solid red;
   padding: 4px;
   border-radius: 10px;
   text-align: center;
@@ -24,7 +34,7 @@
 
 .button:hover {
   color: white;
-  background-color: crimson;
+  background-color: red;
 }
 
 a.create {
@@ -133,6 +143,7 @@ form.message > input[type=submit] {
   border: 1px solid grey;
   margin: 5px 0;
   padding: 5px;
+  border-radius: 2px;
 }
 
 .message-data {
@@ -159,4 +170,11 @@ form.message > input[type=submit] {
 .incoming-replies {
   display: inline;
   font-size: 12px;
+}
+
+.thread-box {
+  border: 1px solid #888;
+  margin: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
 }
