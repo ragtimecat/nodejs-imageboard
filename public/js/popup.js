@@ -139,6 +139,10 @@ const addReplyEvent = (e) => {
   console.log(reply);
   const id = e.target.parentElement.id;
   messageDiv.style.display = 'block';
+  messageDiv.style.top = e.clientX + window.scrollY - 400 + "px";
+  console.log(e.clientX + ' ' + window.scrollY);
+  console.log(messageDiv.style.top);
+  messageDiv.style.left = e.clientY;
   const quote = `>>${id}\r\n`;
   if (textarea.value == '') {
     textarea.value += quote;

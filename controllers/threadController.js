@@ -29,7 +29,9 @@ const create_thread_post = (req, res) => {
 const get_thread_by_id = (req, res) => {
 
   Thread.findById(req.params.id).populate('messages')
-    .then(result => res.render('thread', { title: "imageboard", thread: result }))
+    .then(result => {
+      res.render('thread', { title: "imageboard", thread: result });
+    })
     .catch(err => console.log(err));
 }
 
