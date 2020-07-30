@@ -5,6 +5,7 @@ const Thread = require('./models/thread');
 const boardRoutes = require('./routes/boardRoutes');
 const threadRoutes = require('./routes/threadRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const db = require('./config/db-connect.json');
 const bodyParser = require('body-parser')
 
@@ -51,6 +52,9 @@ app.use('/thread', threadRoutes);
 
 //message routes
 app.use('/message', messageRoutes);
+
+//admin routes
+app.use('/admin', adminRoutes);
 
 
 
