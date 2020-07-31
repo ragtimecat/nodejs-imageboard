@@ -7,7 +7,9 @@ const threadRoutes = require('./routes/threadRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const db = require('./config/db-connect.json');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+
+const upload = require('./middleware/fileUpload');
 
 const app = express();
 
@@ -33,6 +35,16 @@ app.use(async (req, res, next) => {
   //   })
   //   .catch(err => console.log(err));
   next();
+});
+
+// multer test
+app.get('/upload/form', (req, res) => {
+  res.render('upload-form', { title: "form" });
+})
+
+
+app.get('/upload/test', upload.single('image'), async (req, res) => {
+
 });
 
 //paths

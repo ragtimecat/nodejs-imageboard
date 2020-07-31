@@ -1,6 +1,9 @@
 const Message = require('../models/message');
 const Thread = require('../models/thread');
 const threadController = require('./threadController');
+const path = require('path');
+const Resize = require('../classes/Resize');
+
 
 // get form for board creation
 const get_messages_by_thread_id = (id) => {
@@ -21,10 +24,16 @@ const first_message_in_thread = (thread, text) => {
 
 
 // create new message 
-const new_message_post = (req, res) => {
+const new_message_post = async (req, res) => {
+  console.log(req.body);
+  console.log(req.file);
   const replies = replies_parse(req.body.text);
   req.body.outgoingReplies = replies;
   req.body.text = wrapRepliesWithLinks(req.body.text);
+  const picture_path = await upload_picture(req.file);
+  if (picture_path !== null) {
+    req.body.picture_path = picture_path;
+  }
   const message = new Message(req.body);
   message.save()
     .then(result => {
@@ -55,6 +64,19 @@ const message_delete = (req, res) => {
       console.log(err);
       res.status(500).send({ 'error': err });
     });
+}
+
+// upload a picture linked to the post
+const upload_picture = async (file) => {
+  const imagePath = path.join(__dirname, '..', '/public/images');
+  const fileUpload = new Resize(imagePath);
+  if (!file) {
+    // res.status(401).json({ error: 'Please provide an image' });
+    return null;
+  }
+  const filename = await fileUpload.save(file.buffer);
+  console.log(filename);
+  return filename;
 }
 
 const wrapRepliesWithLinks = (text) => {

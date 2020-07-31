@@ -10,6 +10,9 @@ const messageSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Thread"
   },
+  picture_path: {
+    type: String
+  },
   outgoingReplies: [{
     type: String
   }],

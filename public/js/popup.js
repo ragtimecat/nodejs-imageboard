@@ -77,6 +77,7 @@ const textarea = document.querySelector('form.message>textarea');
 const error = document.getElementById('error-message');
 const reply = document.getElementById('reply');
 const deleteMessage = document.querySelectorAll(".delete-message");
+const fileUpload = document.querySelector('input[type=file]');
 
 reply.addEventListener('click', (e) => {
   e.preventDefault();
@@ -160,7 +161,9 @@ button.addEventListener('click', (e) => {
   e.preventDefault();
   //thrid element of array, obtained through separating the row by '/'
   const thread = window.location.pathname.split('/')[2];
-  let text = textarea.value;
+  const text = textarea.value;
+  // const image = window.btoa(fileUpload.files[0]);
+  const image = fileUpload.files[0];
   //wrap reply links with <a> tag with href
   // text = wrapRepliesWithLinks(text);
   if (text == '') {
@@ -169,18 +172,15 @@ button.addEventListener('click', (e) => {
   } else {
     button.setAttribute('disabled', true);
     error.style.display = 'none';
-    const data = {
-      thread,
-      text
-    };
-    console.log(data);
-    fetch('/message/create/', {
+    // const data = {
+    //   thread,
+    //   text,
+    //   image
+    // };
+    // console.log(data);
+    fetch('/message/create', {
       method: "POST",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
+      body: new FormData(document.querySelector('form.message'))
     })
       .then(async (res) => {
         button.removeAttribute('disabled');
