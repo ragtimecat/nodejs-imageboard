@@ -8,7 +8,7 @@ TODO:\
 [x] Implement dynamic message creation\
 [x] Implement replies mechanism\
 [x] Implement images in thread posts\
-[ ] Show last 3(?) messages below the thread title message\
+[x] Show last 3(?) messages below the thread title message\
 [ ] Implement login authentication for admin/moderator\
 [ ] Implement authorisation for admin/moderator\
 [ ] Build an admin panel to control threads/messages/boards\
