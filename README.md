@@ -7,7 +7,7 @@ TODO:\
 [x] Build forms for thread and board creation\
 [x] Implement dynamic message creation\
 [x] Implement replies mechanism\
-[ ] Implement images in thread posts\
+[x] Implement images in thread posts\
 [ ] Show last 3(?) messages below the thread title message\
 [ ] Implement login authentication for admin/moderator\
 [ ] Implement authorisation for admin/moderator\
