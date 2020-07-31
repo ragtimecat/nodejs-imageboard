@@ -37,16 +37,6 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// multer test
-app.get('/upload/form', (req, res) => {
-  res.render('upload-form', { title: "form" });
-})
-
-
-app.get('/upload/test', upload.single('image'), async (req, res) => {
-
-});
-
 //paths
 app.get('/', (req, res) => {
   Board.find()

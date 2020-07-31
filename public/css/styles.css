@@ -188,3 +188,11 @@ input[type=file] {
   margin-top: 10px;
   margin-left: 5px;
 }
+
+.last-messages > .message-box {
+  background-color: rgb(235, 235, 235);
+}
+
+.title-message {
+  margin-bottom: 40px;
+}

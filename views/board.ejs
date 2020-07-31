@@ -14,9 +14,33 @@
       <ul>
         <% if (board.threads.length > 0) { %><% board.threads.forEach(thread => { %>
         <div class="thread-box">
-          <li><a href="/thread/<%= thread._id %>"><%= thread.name %></a><span> <%= thread.createdAt %></span>
-            <a href="/thread/<%= thread._id %>">Reply</a></li>
-          <p class="thread-title-message"><%= thread.text %></p>
+          <div class="title-message">
+            <li><a href="/thread/<%= thread._id %>"><%= thread.name %></a><span> <%= thread.createdAt %></span>
+              <a href="/thread/<%= thread._id %>">Reply</a></li>
+            <p class="thread-title-message"><%= thread.text %></p>
+          </div>
+          <div class="last-messages">
+            <% thread.last_messages.forEach(message => { %>
+            <div class="message-box">
+              <div class="message-data" id="<%= message._id %>">Date: <%= message.createdAt %>
+
+                <div class="post-id">
+                  №>><%= message._id %>
+                </div>
+                <button class="delete-message">
+                  &times
+                </button>
+              </div>
+              <img src="/images/<%= message.picture_path %>" alt="<%= message.picture_path %>">
+              <p class="message-text"><%- message.text %></p>
+              <div class="incoming-replies">
+                <% message.incomingReplies.forEach(reply => { %>
+                <a href="#<%= reply %>" class="incoming-reply">>><%= reply %></a>
+                <% }) %>
+              </div>
+            </div>
+            <% }) %>
+          </div>
         </div>
         <% }) %> <% } else { %>
         <p>There are no threads to display</p>

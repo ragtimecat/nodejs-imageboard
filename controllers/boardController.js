@@ -29,8 +29,15 @@ const create_board_post = (req, res) => {
 // get existing board by id(name in future)
 const board_details_get = async (req, res) => {
   const id = req.params.id;
-  Board.findById(id).populate('threads')
+  Board.findById(id)
+    .populate({
+      path: 'threads',
+      populate: {
+        path: 'last_messages'
+      }
+    })
     .then(result => {
+      console.log(result);
       res.render('board', { title: "Imageboard", board: result })
     })
     .catch(err => console.log(err));

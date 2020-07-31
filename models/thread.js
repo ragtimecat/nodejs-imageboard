@@ -17,6 +17,10 @@ const threadSchema = new Schema({
   messages: [{
     type: Schema.Types.ObjectId,
     ref: "Message"
+  }],
+  last_messages: [{
+    type: Schema.Types.ObjectId,
+    ref: "Message"
   }]
 }, { timestamps: true });
 

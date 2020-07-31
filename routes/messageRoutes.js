@@ -10,7 +10,4 @@ router.post('/create', upload.single('image'), messageController.new_message_pos
 //delete message
 router.delete('/:id', messageController.message_delete);
 
-// //upload a picture
-// router.post('/upload/picture', messageController.upload_picture_post);
-
 module.exports = router;

@@ -25,8 +25,6 @@ const first_message_in_thread = (thread, text) => {
 
 // create new message 
 const new_message_post = async (req, res) => {
-  console.log(req.body);
-  console.log(req.file);
   const replies = replies_parse(req.body.text);
   req.body.outgoingReplies = replies;
   req.body.text = wrapRepliesWithLinks(req.body.text);
@@ -44,9 +42,25 @@ const new_message_post = async (req, res) => {
             .catch(err => console.log(err));
         })
       }
-      Thread.findByIdAndUpdate(req.body.thread, { $addToSet: { messages: result._id } })
-        .then(result => { return result })
-        .catch(err => console.log(err));
+      const message_id = result._id;
+      Thread.find({ _id: req.body.thread }, { last_messages: 1 }).
+        then(result => {
+          // use [0] because by default result contains a massive with single object inside
+          result = result[0];
+          console.log(result.last_messages);
+          if (typeof result.last_messages != 'undefined' && result.last_messages.length < 3) {
+            Thread.findByIdAndUpdate(req.body.thread, { $addToSet: { messages: message_id, last_messages: message_id } })
+              .then(result => { return result })
+              .catch(err => console.log(err));
+          } else if (typeof result.last_messages != 'undefined' && result.last_messages.length >= 3) {
+            const last_messages = result.last_messages;
+            last_messages.shift();
+            last_messages.push(message_id);
+            Thread.findByIdAndUpdate(req.body.thread, { $addToSet: { messages: message_id }, last_messages })
+              .then(result => { return result })
+              .catch(err => console.log(err));
+          }
+        })
       res.json(result);
     })
     .catch(err => console.log(err));
