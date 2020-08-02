@@ -60,7 +60,8 @@ form.login {
   margin-top: 100px;
 }
 
-input[type=text] {
+input[type=text],
+input[type=password] {
   display: inline-block;
   width: 100%;
   margin-bottom: 15px;
@@ -195,4 +196,21 @@ input[type=file] {
 
 .title-message {
   margin-bottom: 40px;
+}
+
+.user-registration > span.error {
+  display: none;
+  color: red;
+  text-align: center;
+}
+
+.user-registration > span.success {
+  display: none;
+  color: green;
+  text-align: center;
+}
+
+.user-registration > form > select {
+  width: 100%;
+  margin-bottom: 15px;
 }

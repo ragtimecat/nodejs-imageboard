@@ -1,3 +1,4 @@
 /node_modules
 config/db-connect.json
+config/default.json
 /public/images

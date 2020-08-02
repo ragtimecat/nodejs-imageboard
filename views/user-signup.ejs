@@ -1,0 +1,73 @@
+<%- include('./partials/head.ejs') %>
+
+<body>
+  <%- include('./partials/nav.ejs') %>
+  <div class="content">
+    <div class="user-registration">
+      <span class="success"></span>
+      <span class="error"></span>
+      <form class="login" action="/user/signup" method="POST">
+        <label for="login">Login:</label>
+        <input type="text" name="login" id="login">
+        <label for="password">Password:</label>
+        <input type="text" name="password" id="password">
+        <label for="user-type">User Type: </label>
+        <select name="user-type" id="user-type">
+          <option value="admin" selected>Admin</option>
+          <option value="moderator">Moderator</option>
+        </select>
+        <input type="submit" value="Sign Up">
+      </form>
+    </div>
+  </div>
+  <script type="text/javascript">
+    const login = document.getElementById('login');
+    const password = document.getElementById('password');
+    const userType = document.getElementById('user-type');
+    const form = document.querySelector('form');
+    const errorSpan = document.querySelector('span.error');
+    const successSpan = document.querySelector('span.success');
+
+    function showMessage(type, message) {
+      if (type == 'error') {
+        successSpan.style.display = 'none';
+        errorSpan.style.display = 'block';
+        errorSpan.textContent = message;
+      } else {
+        errorSpan.style.display = 'none';
+        successSpan.style.display = 'block';
+        successSpan.textContent = message;
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (login.value == '') {
+        showMessage('error', 'Please enter a login');
+      } else if (password.value == '') {
+        showMessage('error', 'Please enter a password');
+      } else if (password.value.length < 5) {
+        showMessage('error', 'Password should have atleast 5 characters');
+      } else {
+        await fetch('/user/signup', {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ login: login.value, password: password.value, userType: userType.value })
+        })
+          .then(async (result) => {
+            const response = await result.json();
+            if (result.status == 200) {
+              showMessage('success', response.msg);
+            } else {
+              showMessage('error', response.msg);
+            }
+          })
+      }
+    })
+
+  </script>
+
+</body>
