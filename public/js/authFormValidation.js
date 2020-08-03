@@ -1,7 +1,8 @@
 
 module.exports = function (login, password) {
   if (login.value == '') {
-    showMessage('error', 'Please enter a login');
+    // showMessage('error', 'Please enter a login');
+    return
   } else if (password.value == '') {
     showMessage('error', 'Please enter a password');
   } else if (password.value.length < 5) {

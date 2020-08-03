@@ -4,6 +4,8 @@ const auth = require('../middleware/auth');
 
 const router = express.Router();
 
+router.get('/logout', userController.logout_get);
+
 // get an admin panel
 router.get('/admin-panel', auth, userController.admin_panel_get);
 

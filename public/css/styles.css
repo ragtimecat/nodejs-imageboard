@@ -214,3 +214,15 @@ input[type=file] {
   width: 100%;
   margin-bottom: 15px;
 }
+
+.admin-nav {
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.admin-nav>a.logout {
+  border: 2px solid red;
+  border-radius: 5px;
+  padding: 10px 15px;
+}

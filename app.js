@@ -8,6 +8,7 @@ const messageRoutes = require('./routes/messageRoutes');
 const userRoutes = require('./routes/userRoutes');
 const db = require('./config/db-connect.json');
 const bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 
 const upload = require('./middleware/fileUpload');
 
@@ -23,6 +24,7 @@ mongoose.connect(db.dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 //view engine
 app.set('view engine', 'ejs');
@@ -45,6 +47,8 @@ app.get('/', (req, res) => {
     })
     .catch(err => console.log(err));
 })
+//admin routes
+app.use('/user', userRoutes);
 
 //board routes
 app.use('/board', boardRoutes);
@@ -55,8 +59,7 @@ app.use('/thread', threadRoutes);
 //message routes
 app.use('/message', messageRoutes);
 
-//admin routes
-app.use('/user', userRoutes);
+
 
 
 

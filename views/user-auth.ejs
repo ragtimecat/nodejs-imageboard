@@ -10,14 +10,14 @@
       <input type="submit" value="Login">
     </form>
   </div>
-  <!-- <script type="text/javascript" src="/js/authFormValidation"></script> -->
-  <script type="text/javascript">
+  <!-- <script type="text/javascript" src="/js/authFormValidation"></script> --> -->
+  <!-- <script type="text/javascript">
     // const validation = require('../js/authFormValidation');
     const form = document.querySelector('form');
     const loginInput = document.getElementById('login');
     const passwordInput = document.getElementById('password');
 
-    form.addEventListener('submit', e => {
+    form.addEventListener('submit', async e => {
       e.preventDefault();
       const login = loginInput.value;
       const password = passwordInput.value;
@@ -29,15 +29,16 @@
       } else if (password.length < 5) {
         showMessage('error', 'Password should have atleast 5 characters');
       } else {
-        fetch('/user/auth', {
+        await fetch('/user/auth', {
           method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          redirect: 'follow',
+          credentials: 'same-origin',
           body: JSON.stringify({ login, password })
         })
-          .then(async result => {
-            result = await result.json();
-            console.log(result);
-          })
       }
     })
-  </script>
+  </script> -->
 </body>

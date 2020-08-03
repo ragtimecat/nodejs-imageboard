@@ -5,6 +5,11 @@ const jwtConfig = require('../config/jwt.json');
 
 // functions
 
+const logout_get = (req, res) => {
+  res.clearCookie('token');
+  res.redirect(302, '/user/auth-form');
+}
+
 //get a login form
 const auth_form_get = (req, res) => {
   res.render('user-auth', { title: "auth" });
@@ -53,7 +58,12 @@ const auth_post = async (req, res) => {
       expiresIn: 360000,
     }, (err, token) => {
       if (err) throw err;
-      res.json({ token })
+      res.cookie('token', token, {
+        maxAge: '60000000000',
+        domain: 'localhost',
+        httpOnly: false,
+      });
+      res.redirect(301, '/user/admin-panel');
     })
 
   } catch (err) {
@@ -121,5 +131,6 @@ module.exports = {
   signup_form_get,
   signup_post,
   auth_get,
-  admin_panel_get
+  admin_panel_get,
+  logout_get
 };
