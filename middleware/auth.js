@@ -4,7 +4,6 @@ const jwtConfig = require('../config/jwt.json');
 
 module.exports = function (req, res, next) {
   // const token = req.header('x-auth-token');
-  console.log(req.cookies.token);
   const token = req.cookies.token;
 
   if (!token) {

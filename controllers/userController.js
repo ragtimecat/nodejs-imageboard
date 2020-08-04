@@ -50,10 +50,12 @@ const auth_post = async (req, res) => {
 
     const payload = {
       user: {
-        id: user._id
+        id: user._id,
+        role: user.userType
       }
     }
 
+    console.log(payload);
     jwt.sign(payload, jwtConfig.jwtSecret, {
       expiresIn: 360000,
     }, (err, token) => {
@@ -104,7 +106,8 @@ const signup_post = async (req, res) => {
 
     const payload = {
       user: {
-        id: new_user._id
+        id: new_user._id,
+        role: new_user.userType
       }
     }
 
