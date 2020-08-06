@@ -6,78 +6,71 @@ const Resize = require('../classes/Resize');
 
 
 // get form for board creation
-const get_messages_by_thread_id = (id) => {
-  return Message.find({ threadId: id }).exec();
+const get_messages_by_thread_id = async (id) => {
+  return await Message.find({ threadId: id });
 }
 
 // create new message with "text" in thread "threadId"
-const first_message_in_thread = (thread, text) => {
-  const message = new Message({ thread, text });
-  message.save()
-    .then(result => {
-      Thread.findByIdAndUpdate(thread, { $addToSet: { messages: result._id } })
-        .then(result => { return result })
-        .catch(err => console.log(err));
-    })
-    .catch(err => console.log(err));
+const first_message_in_thread = async (thread, text) => {
+  try {
+    const message = new Message({ thread, text });
+    const newMessage = await message.save();
+    await Thread.findByIdAndUpdate(thread, { $addToSet: { messages: newMessage._id } });
+    return { message: "Everything is okay" };
+  } catch (err) {
+    return { message: "Error happened somewhere" };
+  }
 }
 
 
 // create new message 
 const new_message_post = async (req, res) => {
-  const replies = replies_parse(req.body.text);
-  req.body.outgoingReplies = replies;
-  req.body.text = wrapRepliesWithLinks(req.body.text);
-  const picture_path = await upload_picture(req.file);
-  if (picture_path !== null) {
-    req.body.picture_path = picture_path;
+  try {
+    const replies = replies_parse(req.body.text);
+    req.body.outgoingReplies = replies;
+    req.body.text = wrapRepliesWithLinks(req.body.text);
+    const picture_path = await upload_picture(req.file);
+    if (picture_path !== null) {
+      req.body.picture_path = picture_path;
+    }
+    const message = new Message(req.body);
+    const newMessage = await message.save();
+
+    if (typeof replies != 'undefined' && replies.length > 0) {
+      replies.forEach(async reply => {
+        await Message.findByIdAndUpdate(reply, { $addToSet: { incomingReplies: newMessage._id } });
+      })
+    }
+
+    let thread = await Thread.find({ _id: req.body.thread }, { last_messages: 1 });
+    // use [0] because by default result contains an array with single object inside
+    thread = thread[0];
+    if (typeof thread.last_messages != 'undefined' && thread.last_messages.length < 3) {
+      await Thread.findByIdAndUpdate(req.body.thread,
+        { $addToSet: { messages: newMessage._id, last_messages: newMessage._id } });
+    } else if (typeof thread.last_messages != 'undefined' && thread.last_messages.length >= 3) {
+      const last_messages = thread.last_messages;
+      last_messages.shift();
+      last_messages.push(newMessage._id);
+      await Thread.findByIdAndUpdate(req.body.thread, { $addToSet: { messages: newMessage._id }, last_messages });
+    }
+
+    res.json(newMessage);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
   }
-  const message = new Message(req.body);
-  message.save()
-    .then(result => {
-      if (typeof replies != 'undefined' && replies.length > 0) {
-        replies.forEach(reply => {
-          Message.findByIdAndUpdate(reply, { $addToSet: { incomingReplies: result._id } })
-            .then(result => { return result })
-            .catch(err => console.log(err));
-        })
-      }
-      const message_id = result._id;
-      Thread.find({ _id: req.body.thread }, { last_messages: 1 }).
-        then(result => {
-          // use [0] because by default result contains a massive with single object inside
-          result = result[0];
-          console.log(result.last_messages);
-          if (typeof result.last_messages != 'undefined' && result.last_messages.length < 3) {
-            Thread.findByIdAndUpdate(req.body.thread, { $addToSet: { messages: message_id, last_messages: message_id } })
-              .then(result => { return result })
-              .catch(err => console.log(err));
-          } else if (typeof result.last_messages != 'undefined' && result.last_messages.length >= 3) {
-            const last_messages = result.last_messages;
-            last_messages.shift();
-            last_messages.push(message_id);
-            Thread.findByIdAndUpdate(req.body.thread, { $addToSet: { messages: message_id }, last_messages })
-              .then(result => { return result })
-              .catch(err => console.log(err));
-          }
-        })
-      res.json(result);
-    })
-    .catch(err => console.log(err));
 }
 
 
 //delete message
-const message_delete = (req, res) => {
-  Message.findByIdAndDelete(req.body.id)
-    .then(result => {
-      console.log(result);
-      res.status(200).send({ payload: result });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).send({ 'error': err });
-    });
+const message_delete = async (req, res) => {
+  try {
+    const deletedMessage = await Message.findByIdAndDelete(req.body.id);
+    res.status(200).send({ payload: deletedMessage });
+  } catch (err) {
+    res.status(500).send({ 'error': err });
+  }
 }
 
 // upload a picture linked to the post
