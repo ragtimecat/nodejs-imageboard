@@ -1,5 +1,4 @@
 const Board = require('../models/board');
-const threadController = require('./threadController');
 
 // get form for board creation
 const create_board_get = (req, res) => {
@@ -7,40 +6,36 @@ const create_board_get = (req, res) => {
 }
 
 // create new board
-const create_board_post = (req, res) => {
-  Board.find({ name: req.body.name })
-    .then(result => {
-      if (result.length > 0) {
-        res.render('create-board', { title: "error", message: "There is a board with such name already" })
-        // throw new Error('there is a document with such name already');
-      } else {
-        const board = new Board(req.body);
-        board.save()
-          .then(result => {
-            res.redirect('/');
-          })
-          .catch(err => console.log(err));
-      }
-    })
-    .catch(err => console.log(err));
+const create_board_post = async (req, res) => {
+  const isExist = await Board.findOne({ name: req.body.name });
 
+  if (isExist) {
+    return res.render('create-board', { title: "error", message: "There is a board with such name already" });
+  }
+  try {
+    const board = new Board(req.body);
+    const createdBoard = await board.save();
+    return res.redirect(301, `/board/${createdBoard._id}`);
+  } catch (err) {
+    return res.sendStatus(500);
+  }
 }
 
 // get existing board by id(name in future)
 const board_details_get = async (req, res) => {
-  const id = req.params.id;
-  Board.findById(id)
-    .populate({
+  try {
+    const id = req.params.id;
+    const board = await Board.findById(id).populate({
       path: 'threads',
       populate: {
         path: 'last_messages'
       }
-    })
-    .then(result => {
-      console.log(result);
-      res.render('board', { title: "Imageboard", board: result })
-    })
-    .catch(err => console.log(err));
+    });
+    return res.render('board', { title: 'Imageboard', board });
+  } catch (err) {
+    return res.render('404', { title: 'Error', message: 'Page not found' });
+  }
+
 }
 
 module.exports = {
