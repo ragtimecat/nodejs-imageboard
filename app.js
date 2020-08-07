@@ -40,12 +40,13 @@ app.use(async (req, res, next) => {
 });
 
 //paths
-app.get('/', (req, res) => {
-  Board.find()
-    .then(result => {
-      res.render('index', { title: "main page", boards: result })
-    })
-    .catch(err => console.log(err));
+app.get('/', async (req, res) => {
+  try {
+    const boards = await Board.find();
+    res.render('index', { title: "main page", boards });
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 })
 //admin routes
 app.use('/user', userRoutes);
