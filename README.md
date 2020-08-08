@@ -13,3 +13,4 @@ TODO:\
 [ ] Implement authorisation for admin/moderator\
 [ ] Build an admin panel to control threads/messages/boards\
 [ ] Implement a staff chat via websockets\
+[ ] Add plot for viewers/threads/messages statistic\

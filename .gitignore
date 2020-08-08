@@ -1,4 +1,4 @@
 /node_modules
 config/db-connect.json
-config/default.json
+config/jwt.json
 /public/images
