@@ -1,0 +1,24 @@
+<%- include('./partials/head.ejs') %>
+
+<body>
+  <%- include('./partials/admin-nav.ejs') %>
+  <div class="content">
+    <form class="profile" action="/user/profile" method="POST">
+      <label for="role">Name: </label>
+      <input type="text" name="name" id="name" value="<%= user.name %>">
+      <label for="role">Surname: </label>
+      <input type="text" name="surname" id="surname" value="<%= user.surname %>">
+      <label for="role">Role: </label>
+      <select name="userType" id="role" value="<%= user.userType %>">
+        <% if (user.userType === 'admin') { %>
+        <option value="admin" selected>Admin</option>
+        <option value="moderator">Moderator</option>
+        <% } else { %>
+        <option value="admin">Admin</option>
+        <option value="moderator" selected>Moderator</option>
+        <% } %>
+      </select>
+      <input type="submit" value="Save">
+    </form>
+  </div>
+</body>

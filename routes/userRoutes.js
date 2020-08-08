@@ -24,4 +24,10 @@ router.get('/signup-form', userController.signup_form_get);
 //new user sign up
 router.post('/signup', userController.signup_post);
 
+// get user profile page
+router.get('/profile', auth, userController.user_profile_get);
+
+// update user rpofile
+router.post('/profile', auth, userController.user_profile_post);
+
 module.exports = router;

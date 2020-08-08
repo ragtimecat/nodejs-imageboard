@@ -3,7 +3,15 @@
 <body>
   <%- include('./partials/admin-nav.ejs') %>
   <div class="content">
-    <h1>Welcome to the admin panel</h1>
+    <h1>Welcome to the admin panel <% if (typeof user.name !== 'undefined') { %>
+      <%= user.name %>
+      <% } else { %>
+      <%= user.role %>
+      <% } %>
+      <% if (typeof user.surname !== 'undefined'){ %>
+      <%= user.surname %>
+      <% } %>
+    </h1>
   </div>
 
 </body>

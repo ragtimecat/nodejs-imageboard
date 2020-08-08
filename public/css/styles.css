@@ -54,7 +54,8 @@ a.create:hover {
 
 form.board,
 form.thread,
-form.login {
+form.login,
+form.profile {
   max-width: 300px;
   margin: auto;
   margin-top: 100px;
@@ -210,7 +211,11 @@ input[type=file] {
   text-align: center;
 }
 
-.user-registration > form > select {
+/* .user-registration > form > select {
+  width: 100%;
+  margin-bottom: 15px;
+} */
+select {
   width: 100%;
   margin-bottom: 15px;
 }
@@ -221,8 +226,46 @@ input[type=file] {
   justify-content: space-between;
 }
 
-.admin-nav>a.logout {
-  border: 2px solid red;
+.admin-nav>ul-links {
+  display: flex;
+}
+
+.admin-nav a.button {
+  border: 2px solid;
   border-radius: 5px;
-  padding: 10px 15px;
+  padding: 3px 6px;
+  margin: 0 5px;
+}
+
+.admin-nav a.button.logout {
+  border-color:red;
+  color: red;
+}
+
+.admin-nav a.button.logout:hover {
+  border-color:red;
+  color: white;
+  background-color: red;
+}
+
+.admin-nav a.button.profile {
+  border-color:green;
+  color: green;
+}
+
+.admin-nav a.button.profile:hover {
+  border-color:green;
+  color: white;
+  background-color: green;
+}
+
+.admin-nav a.button.panel {
+  border-color:blue;
+  color: blue;
+}
+
+.admin-nav a.button.panel:hover {
+  border-color:blue;
+  color: white;
+  background-color: blue;
 }

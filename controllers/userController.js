@@ -12,6 +12,12 @@ const logout_get = (req, res) => {
 
 //get a login form
 const auth_form_get = (req, res) => {
+  const token = req.cookies.token;
+  if (token) {
+    res.redirect(302, '/user/admin-panel');
+  }
+
+
   res.render('user-auth', { title: "auth" });
 }
 
@@ -19,7 +25,7 @@ const auth_form_get = (req, res) => {
 const auth_get = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
-    res.json(user);
+    res.status(200).json(user);
   } catch (err) {
     console.log(err);
     res.status(500).send(err);
@@ -114,7 +120,9 @@ const signup_post = async (req, res) => {
     jwt.sign(payload, jwtConfig.jwtSecret, {
       expiresIn: 360000,
     }, (err, token) => {
-      if (err) throw err;
+      if (err) {
+        throw err;
+      }
       res.json({ msg: 'User successfully created', token })
     })
   } catch (err) {
@@ -123,8 +131,42 @@ const signup_post = async (req, res) => {
 }
 
 //get an admin panel
-const admin_panel_get = (req, res) => {
-  res.render('admin-panel', { title: 'Admin Panel' });
+const admin_panel_get = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.user.id }).select('-password');
+    if (!user) {
+      res.status(404).json({ msg: 'User not found' });
+    }
+    res.render('admin-panel', { title: 'Admin Panel', user });
+  } catch (err) {
+    res.status(500).json({ msg: err.message })
+  }
+}
+
+
+//get profile page
+const user_profile_get = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.user.id }).select('-password');
+    if (!user) {
+      res.status(404).json({ msg: 'User not found' });
+    }
+    res.render('user-profile', { title: 'Profile Panel', user });
+  } catch (err) {
+    res.status(500).json({ msg: err.message })
+  }
+}
+
+// update user profile
+const user_profile_post = async (req, res) => {
+  const { name, surname, userType } = req.body;
+  try {
+    const user = await User.findByIdAndUpdate(req.user.id, { name, surname, userType });
+    console.log('here' + user);
+    res.render('user-profile', { title: 'Profile Panel', user: { name, surname, userType, ...user } });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
 }
 
 
@@ -135,5 +177,7 @@ module.exports = {
   signup_post,
   auth_get,
   admin_panel_get,
-  logout_get
+  logout_get,
+  user_profile_get,
+  user_profile_post
 };
