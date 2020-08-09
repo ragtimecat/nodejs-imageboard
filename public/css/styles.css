@@ -226,7 +226,7 @@ select {
   justify-content: space-between;
 }
 
-.admin-nav>ul-links {
+.admin-nav>ul.button-links {
   display: flex;
 }
 

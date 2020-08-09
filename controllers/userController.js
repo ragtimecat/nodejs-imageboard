@@ -92,6 +92,7 @@ const signup_post = async (req, res) => {
   if (login == '') {
     return res.status(400).json({ msg: 'no login' });
   }
+
   if (password == '') {
     return res.status(400).json({ msg: 'no password' });
   } else if (password.length < 5) {
@@ -137,6 +138,7 @@ const admin_panel_get = async (req, res) => {
     if (!user) {
       res.status(404).json({ msg: 'User not found' });
     }
+
     res.render('admin-panel', { title: 'Admin Panel', user });
   } catch (err) {
     res.status(500).json({ msg: err.message })
@@ -151,6 +153,7 @@ const user_profile_get = async (req, res) => {
     if (!user) {
       res.status(404).json({ msg: 'User not found' });
     }
+
     res.render('user-profile', { title: 'Profile Panel', user });
   } catch (err) {
     res.status(500).json({ msg: err.message })
@@ -169,6 +172,10 @@ const user_profile_post = async (req, res) => {
   }
 }
 
+const stuff_management_get = async (req, res) => {
+  res.render('stuff-management', { title: 'Stuff management page' })
+}
+
 
 module.exports = {
   auth_form_get,
@@ -179,5 +186,6 @@ module.exports = {
   admin_panel_get,
   logout_get,
   user_profile_get,
-  user_profile_post
+  user_profile_post,
+  stuff_management_get
 };

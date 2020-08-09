@@ -30,4 +30,7 @@ router.get('/profile', auth, userController.user_profile_get);
 // update user rpofile
 router.post('/profile', auth, userController.user_profile_post);
 
+//get user management page
+router.get('/management', auth, userController.stuff_management_get);
+
 module.exports = router;
