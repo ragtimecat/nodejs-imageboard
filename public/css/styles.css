@@ -269,3 +269,14 @@ select {
   color: white;
   background-color: blue;
 }
+
+.admin-nav a.button.chat {
+  border-color: #9505C3;
+  color: #9505C3;
+}
+
+.admin-nav a.button.chat:hover {
+  border-color:#9505C3;
+  color: white;
+  background-color: #9505C3;
+}

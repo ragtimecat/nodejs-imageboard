@@ -9,16 +9,19 @@ const userRoutes = require('./routes/userRoutes');
 const db = require('./config/db-connect.json');
 const bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+const http = require('http');
+const chat = require('./chat');
 
 const upload = require('./middleware/fileUpload');
 
+// const app = express();
 const app = express();
+const server = http.createServer(app);
 
 // db connect
 mongoose.connect(db.dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(result => app.listen(3000))
+  .then(result => server.listen(3000))
   .catch(err => console.log(err));
-
 
 //static files
 app.use(express.static('public'));
@@ -38,6 +41,9 @@ app.use(async (req, res, next) => {
   //   .catch(err => console.log(err));
   next();
 });
+
+//socketio chat
+chat(server);
 
 //paths
 app.get('/', async (req, res) => {
@@ -59,10 +65,6 @@ app.use('/thread', threadRoutes);
 
 //message routes
 app.use('/message', messageRoutes);
-
-
-
-
 
 // 404
 app.use('/', (req, res) => {

@@ -1,0 +1,18 @@
+<%- include('./partials/head.ejs') %>
+
+<body>
+  <%- include('./partials/admin-nav.ejs') %>
+  <div class="content">
+    <p>Message</p>
+    <div class="message">
+
+    </div>
+    <form id="chat-form">
+      <input type="text" name="msg" id="msg">
+      <input type="submit" value="Send">
+    </form>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/frontendChat.js"></script>
+
+</body>

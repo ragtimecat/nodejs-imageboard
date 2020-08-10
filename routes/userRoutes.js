@@ -31,6 +31,9 @@ router.get('/profile', auth, userController.user_profile_get);
 router.post('/profile', auth, userController.user_profile_post);
 
 //get user management page
-router.get('/management', auth, userController.stuff_management_get);
+router.get('/management', auth, userController.staff_management_get);
+
+//get a staff chat page
+router.get('/chat', auth, userController.staff_chat_get);
 
 module.exports = router;

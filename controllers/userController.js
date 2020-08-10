@@ -63,11 +63,11 @@ const auth_post = async (req, res) => {
 
     console.log(payload);
     jwt.sign(payload, jwtConfig.jwtSecret, {
-      expiresIn: 360000,
+      expiresIn: 3600,
     }, (err, token) => {
       if (err) throw err;
       res.cookie('token', token, {
-        maxAge: '60000000000',
+        maxAge: '3600000',
         domain: 'localhost',
         httpOnly: false,
       });
@@ -165,17 +165,19 @@ const user_profile_post = async (req, res) => {
   const { name, surname, userType } = req.body;
   try {
     const user = await User.findByIdAndUpdate(req.user.id, { name, surname, userType });
-    console.log('here' + user);
     res.render('user-profile', { title: 'Profile Panel', user: { name, surname, userType, ...user } });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
 }
 
-const stuff_management_get = async (req, res) => {
+const staff_management_get = async (req, res) => {
   res.render('stuff-management', { title: 'Stuff management page' })
 }
 
+const staff_chat_get = (req, res) => {
+  res.render('staff-chat', { title: 'Chat' });
+}
 
 module.exports = {
   auth_form_get,
@@ -187,5 +189,6 @@ module.exports = {
   logout_get,
   user_profile_get,
   user_profile_post,
-  stuff_management_get
+  staff_management_get,
+  staff_chat_get
 };
