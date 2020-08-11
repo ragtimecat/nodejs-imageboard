@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Board = require('./models/board');
-const Thread = require('./models/thread');
+const User = require('./models/user');
 const boardRoutes = require('./routes/boardRoutes');
 const threadRoutes = require('./routes/threadRoutes');
 const messageRoutes = require('./routes/messageRoutes');
@@ -11,6 +11,7 @@ const bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 const http = require('http');
 const chat = require('./chat');
+const auth = require('./middleware/auth');
 
 const upload = require('./middleware/fileUpload');
 
@@ -42,18 +43,22 @@ app.use(async (req, res, next) => {
   next();
 });
 
-//socketio chat
-chat(server);
+
 
 //paths
 app.get('/', async (req, res) => {
   try {
     const boards = await Board.find();
     res.render('index', { title: "main page", boards });
-  } catch (err) {
-    res.status(500).send(err.message);
+  } catch (error) {
+    res.status(500).send(error.message);
   }
 })
+//socketio chat route
+//fires only when user gets a page with sockeio forntent lib(only /user/chat path)
+chat(server);
+
+
 //admin routes
 app.use('/user', userRoutes);
 

@@ -9,7 +9,14 @@
       <a class="button chat" href="/user/chat">Chat</a>
     </li>
     <li>
-      <a class="button profile" href="/user/profile">Profile</a>
+      <a class="button profile" href="/user/profile">
+        <% if (typeof user !== 'undefined') { %>
+        <p>Logged as:</p>
+        <p><%= user.name %> <%= user.surname %></p>
+        <% } else {%>
+        Profile
+        <% } %>
+      </a>
     </li>
     <li>
       <a class="button logout" href="/user/logout">Logout</a>

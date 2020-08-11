@@ -175,8 +175,9 @@ const staff_management_get = async (req, res) => {
   res.render('stuff-management', { title: 'Stuff management page' })
 }
 
-const staff_chat_get = (req, res) => {
-  res.render('staff-chat', { title: 'Chat' });
+const staff_chat_get = async (req, res) => {
+  const user = await User.findById(req.user.id);
+  res.render('staff-chat', { title: 'Chat', user });
 }
 
 module.exports = {
