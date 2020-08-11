@@ -67,7 +67,7 @@ const auth_post = async (req, res) => {
     }, (err, token) => {
       if (err) throw err;
       res.cookie('token', token, {
-        maxAge: '3600000',
+        maxAge: '360000000',
         domain: 'localhost',
         httpOnly: false,
       });

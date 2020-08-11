@@ -1,16 +1,78 @@
-<%- include('./partials/head.ejs') %>
+<%- include('./partials/chat-head.ejs') %>
 
 <body>
   <%- include('./partials/admin-nav.ejs') %>
-  <div class="content">
-    <p>Message</p>
-    <div class="message">
-
+  <div class="chat-container">
+    <header class="chat-header">
+      <h1>Chat Name</h1>
+      <select name="select-chat" id="select-chat">
+        <option value="general">General</option>
+        <option value="improvements">Improvements</option>
+        <option value="problems">Problems</option>
+      </select>
+    </header>
+    <main class="chat-main">
+      <div class="chat-sidebar">
+        <h3>
+          <div class="online"></div> Users Online
+        </h3>
+        <ul class="users-online">
+          <li>
+            <div class="online"></div>Peter
+          </li>
+          <li>
+            <div class="online"></div>Jamie
+          </li>
+        </ul>
+        <h3>
+          <div class="offline"></div> Users Offline
+        </h3>
+        <ul class="users-offline">
+          <li>
+            <div class="offline"></div>Max
+          </li>
+          <li>
+            <div class="offline"></div>Willie
+          </li>
+        </ul>
+      </div>
+      <div class="chat-messages">
+        <div class="message">
+          <p class="meta">Brad <span>9:12pm</span></p>
+          <p class="text">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi,
+            repudiandae.
+          </p>
+        </div>
+        <div class="message">
+          <p class="meta">Mary <span>9:15pm</span></p>
+          <p class="text">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi,
+            repudiandae.
+          </p>
+        </div>
+        <div class="message">
+          <p class="meta">Brad <span>9:12pm</span></p>
+          <p class="text">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi,
+            repudiandae.
+          </p>
+        </div>
+        <div class="message">
+          <p class="meta">Mary <span>9:15pm</span></p>
+          <p class="text">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi,
+            repudiandae.
+          </p>
+        </div>
+      </div>
+    </main>
+    <div class="chat-form-container">
+      <form id="chat-form">
+        <input type="text" id="msg" placeholder="Message" required autocomplete="off" />
+        <input class="btn" type="submit" value="Submit">
+      </form>
     </div>
-    <form id="chat-form">
-      <input type="text" name="msg" id="msg">
-      <input type="submit" value="Send">
-    </form>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/frontendChat.js"></script>

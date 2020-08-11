@@ -1,3 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Lato', sans-serif;
 }
@@ -70,7 +76,6 @@ input[type=password] {
 
 input[type=submit] {
   display: inline-block;
-  margin: auto;
 }
 
 h1, h3 {
@@ -215,7 +220,7 @@ input[type=file] {
   width: 100%;
   margin-bottom: 15px;
 } */
-select {
+select#role {
   width: 100%;
   margin-bottom: 15px;
 }
@@ -280,3 +285,4 @@ select {
   color: white;
   background-color: #9505C3;
 }
+
