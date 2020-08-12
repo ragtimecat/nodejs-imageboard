@@ -1,3 +1,7 @@
+:root {
+ --purple: #9505C3;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -16,6 +20,7 @@ a {
 
 .content {
   padding: 40px;
+  max-width: 1020px;
 }
 
 .error {
@@ -29,19 +34,77 @@ a {
 
 .button {
   text-decoration: none;
-  color: red;
   font-size: 18px;
   display: inline-block;
-  border: 2px solid red;
   padding: 4px;
   border-radius: 10px;
-  text-align: center;
+  margin: 0 5px;
 }
 
-.button:hover {
+.red {
+  color: red;
+  border: 2px solid red;
+}
+
+.button.red:hover {
   color: white;
   background-color: red;
+  cursor: pointer;
 }
+
+.green {
+  color: green;
+  border: 2px solid green;
+}
+
+.button.green:hover {
+  color: white;
+  background-color: green;
+  cursor: pointer;
+}
+
+.blue {
+  color: blue;
+  border: 2px solid blue;
+}
+
+.button.blue:hover {
+  color: white;
+  background-color: blue;
+  cursor: pointer;
+}
+
+.purple {
+  color:  var(--purple);
+  border: 2px solid  var(--purple);
+}
+
+.button.purple:hover {
+  color: white;
+  background-color: var(--purple);
+  cursor: pointer;
+}
+
+.yello {
+  color: yellow;
+  border: 2px solid yellow;
+}
+
+.button.yellow:hover {
+  color: white;
+  background-color: yellow;
+  cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
 
 a.create {
   text-decoration: none;
@@ -284,5 +347,21 @@ select#role {
   border-color:#9505C3;
   color: white;
   background-color: #9505C3;
+}
+
+.admin-features {
+  display: flex;
+  margin-top: 30px;
+}
+
+.staff-profile-management {
+  text-align: center;
+  border: 2px solid green;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.staff-profile-management a {
+  margin-top: 20px;
 }
 

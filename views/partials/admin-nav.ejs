@@ -1,15 +1,15 @@
 <nav class="admin-nav">
   <ul class="main-link">
     <li>
-      <a class="button panel" href="/user/admin-panel">Panel</a>
+      <a class="button blue panel" href="/user/admin-panel">Panel</a>
     </li>
   </ul>
   <ul class="button-links">
     <li>
-      <a class="button chat" href="/user/chat">Chat</a>
+      <a class="button purple chat" href="/user/chat">Chat</a>
     </li>
     <li>
-      <a class="button profile" href="/user/profile">
+      <a class="button green profile" href="/user/profile">
         <% if (typeof user !== 'undefined') { %>
         <p>Logged as:</p>
         <p><%= user.name %> <%= user.surname %></p>
@@ -19,7 +19,7 @@
       </a>
     </li>
     <li>
-      <a class="button logout" href="/user/logout">Logout</a>
+      <a class="button red logout" href="/user/logout">Logout</a>
     </li>
   </ul>
 </nav>

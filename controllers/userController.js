@@ -5,6 +5,7 @@ const jwtConfig = require('../config/jwt.json');
 
 // functions
 
+//logout
 const logout_get = (req, res) => {
   res.clearCookie('token');
   res.redirect(302, '/user/auth-form');
@@ -88,7 +89,7 @@ const signup_form_get = (req, res) => {
 
 //signup user with login, password and userType params
 const signup_post = async (req, res) => {
-  const { login, password, userType } = req.body;
+  const { login, password, name, surname, userType } = req.body;
   if (login == '') {
     return res.status(400).json({ msg: 'no login' });
   }
@@ -107,7 +108,7 @@ const signup_post = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     const encrypted_password = await bcrypt.hash(password, salt);
-    const new_user = new User({ login, password: encrypted_password, userType });
+    const new_user = new User({ login, password: encrypted_password, name, surname, userType });
 
     await new_user.save()
 
@@ -138,7 +139,6 @@ const admin_panel_get = async (req, res) => {
     if (!user) {
       res.status(404).json({ msg: 'User not found' });
     }
-
     res.render('admin-panel', { title: 'Admin Panel', user });
   } catch (err) {
     res.status(500).json({ msg: err.message })
@@ -163,8 +163,15 @@ const user_profile_get = async (req, res) => {
 // update user profile
 const user_profile_post = async (req, res) => {
   const { name, surname, userType } = req.body;
+  let id;
+  if (typeof req.body.id !== 'undefined') {
+    id = req.body.id;
+  } else {
+    id = req.user.id
+  }
+  console.log(id);
   try {
-    const user = await User.findByIdAndUpdate(req.user.id, { name, surname, userType });
+    const user = await User.findByIdAndUpdate(id, { name, surname, userType });
     res.render('user-profile', { title: 'Profile Panel', user: { name, surname, userType, ...user } });
   } catch (error) {
     res.status(500).json({ msg: error.message });
@@ -172,7 +179,8 @@ const user_profile_post = async (req, res) => {
 }
 
 const staff_management_get = async (req, res) => {
-  res.render('stuff-management', { title: 'Stuff management page' })
+  const users = await User.find().select({ _id: 1, name: 1 });
+  res.render('staff-management', { title: 'Staff management page', users })
 }
 
 const staff_chat_get = async (req, res) => {
@@ -180,7 +188,23 @@ const staff_chat_get = async (req, res) => {
   res.render('staff-chat', { title: 'Chat', user });
 }
 
+
+//get user by id
+const user_get = async (req, res) => {
+  const users = await User.findById(req.params.id, { password: 0, createdAt: 0, updatedAt: 0 });
+  res.json(users);
+}
+
+//delete user
+const user_delete = async (req, res) => {
+  const id = req.params.id;
+  const user = await User.findByIdAndDelete(id);
+  res.json(user);
+}
+
 module.exports = {
+  user_get,
+  user_delete,
   auth_form_get,
   auth_post,
   signup_form_get,

@@ -4,7 +4,6 @@ const socketio = require('socket.io');
 
 module.exports = function (server, req, res) {
   const io = socketio(server);
-  console.log(req);
 
   const botName = 'The Board Bot';
   // const username = `${user.name} ${user.surname}`;

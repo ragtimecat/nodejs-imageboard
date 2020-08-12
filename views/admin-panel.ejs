@@ -3,15 +3,24 @@
 <body>
   <%- include('./partials/admin-nav.ejs') %>
   <div class="content">
+    <%= user.role %>
     <h1>Welcome to the admin panel <% if (typeof user.name !== 'undefined') { %>
       <%= user.name %>
       <% } else { %>
-      <%= user.role %>
+      <%= user.userType %>
       <% } %>
       <% if (typeof user.surname !== 'undefined'){ %>
       <%= user.surname %>
       <% } %>
     </h1>
+    <div class="admin-features">
+      <% if (user.userType == 'admin') { %>
+      <div class="staff-profile-management">
+        <p>Staff management panel</p>
+        <a href="/user/staff-management" class="button green">Manage</a>
+      </div>
+      <% } %>
+    </div>
   </div>
 
 </body>
