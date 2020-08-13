@@ -1,8 +1,15 @@
 const formatMessage = require('./utils/chatMessages');
-// const chatAuth = require('./utils/chatAuth');
-const socketio = require('socket.io');
+const tokenPrase = require('./utils/chatJwtParse');
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const jwtConfig = require('./config/jwt.json');
+const User = require('./models/user');
 
-module.exports = function (server, req, res) {
+const socketio = require('socket.io');
+// const chatAuth = require('./utils/chatAuth');
+
+module.exports = function (server) {
+
   const io = socketio(server);
 
   const botName = 'The Board Bot';
@@ -22,8 +29,13 @@ module.exports = function (server, req, res) {
       io.emit('message', formatMessage('user', 'A user has left the chat'));
     })
 
-    socket.on('chatMessage', message => {
-      io.emit('message', formatMessage('user', message));
+    socket.on('chatMessage', async (message) => {
+      const cookie = socket.client.request.headers.cookie;
+      const token = tokenPrase(cookie);
+      const decoded = jwt.verify(token, jwtConfig.jwtSecret);
+      const user = await User.findById(decoded.user.id);
+
+      io.emit('message', formatMessage(`${user.name} ${user.surname}`, message));
     });
 
   })

@@ -96,16 +96,6 @@ a {
   cursor: pointer;
 }
 
-
-
-
-
-
-
-
-
-
-
 a.create {
   text-decoration: none;
   color: black;
@@ -119,6 +109,25 @@ a.create {
 a.create:hover {
   color: white;
   background-color: black;
+}
+
+.user-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.user-nav .site-title :first-child {
+  margin-bottom: 10px;
+}
+
+.user-nav ul.boards {
+  display: flex;
+}
+
+.user-nav ul.boards li {
+  padding: 5px;
 }
 
 form.board,
@@ -363,5 +372,25 @@ select#role {
 
 .staff-profile-management a {
   margin-top: 20px;
+}
+
+.user-management {
+  max-width: 300px;
+  margin: auto;
+}
+
+.user-management>select {
+  width: 100%;
+  margin-bottom: 10px;
+  border: 2px solid green;
+  border-radius: 5px;
+}
+
+.user-management form {
+  display: inline;
+}
+
+.user-management .delete-user {
+  display: inline-block;
 }
 

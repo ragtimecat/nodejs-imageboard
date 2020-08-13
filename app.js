@@ -13,6 +13,9 @@ const http = require('http');
 const chat = require('./chat');
 const auth = require('./middleware/auth');
 
+const formatMessage = require('./utils/chatMessages');
+
+
 const upload = require('./middleware/fileUpload');
 
 // const app = express();
@@ -55,8 +58,37 @@ app.get('/', async (req, res) => {
   }
 })
 //socketio chat route
-//fires only when user gets a page with sockeio forntent lib(only /user/chat path)
+//fires only when user gets a page with sockeio forntent lib(only /user/chat path
 chat(server);
+
+// const botName = 'The Board Bot';
+
+
+
+// io.on('connection', socket => {
+//   console.log('connected');
+
+//   const client = socket.client;
+//   console.log(client.request.headers.cookie);
+//   // message for connecting user
+//   socket.emit('message', formatMessage(botName, `Welcome to the chat, user`));
+
+//   //message for everyone else in chat
+//   socket.broadcast.emit('message', formatMessage(botName, `A user has joined the chat`));
+
+//   socket.on('disconnect', () => {
+//     console.log('disconnected');
+//     io.emit('message', formatMessage('user', 'A user has left the chat'));
+//   })
+
+//   socket.on('chatMessage', (message, name) => {
+//     console.log(client.request);
+//     io.emit('message', formatMessage(name, message));
+//   });
+
+// })
+
+
 
 
 //admin routes

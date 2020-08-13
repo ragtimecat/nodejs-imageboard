@@ -2,7 +2,7 @@ const messageDiv = document.querySelector('.message');
 const chatForm = document.getElementById('chat-form');
 const chatMessages = document.querySelector('.chat-messages');
 
-const socket = io();
+const socket = io.connect('', { forceNew: true });
 
 socket.on('message', message => {
   outputMessage(message);
@@ -12,7 +12,8 @@ socket.on('message', message => {
 chatForm.addEventListener('submit', e => {
   e.preventDefault();
   const message = e.target.elements.msg.value;
-  socket.emit('chatMessage', message);
+  const name = e.target.elements.name.value;
+  socket.emit('chatMessage', message, name);
 
   e.target.elements.msg.value = '';
   e.target.elements.msg.focus();

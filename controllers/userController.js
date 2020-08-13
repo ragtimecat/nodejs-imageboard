@@ -169,7 +169,6 @@ const user_profile_post = async (req, res) => {
   } else {
     id = req.user.id
   }
-  console.log(id);
   try {
     const user = await User.findByIdAndUpdate(id, { name, surname, userType });
     res.render('user-profile', { title: 'Profile Panel', user: { name, surname, userType, ...user } });
@@ -179,8 +178,11 @@ const user_profile_post = async (req, res) => {
 }
 
 const staff_management_get = async (req, res) => {
+  //get all user ids and names
   const users = await User.find().select({ _id: 1, name: 1 });
-  res.render('staff-management', { title: 'Staff management page', users })
+  //get first user
+  const firstUser = await User.findOne().select({ _id: 1, name: 1, surname: 1, userType: 1 });
+  res.render('staff-management', { title: 'Staff management page', users, firstUser })
 }
 
 const staff_chat_get = async (req, res) => {

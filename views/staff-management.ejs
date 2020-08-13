@@ -2,35 +2,40 @@
 
 <body>
   <%- include('./partials/admin-nav.ejs') %>
-  <div class="user-management">
-    <%= users %>
-    <% users.forEach(user => { %>
-    kekekekekek
-    <% }) %>
-    <select name="user" id="user">
-      <% users.forEach(user => { %>
-      <option value="<%= user._id %>"><%= user.name %></option>
-      <% }) %>
-    </select>
-    <form class="profile" action="/user/profile" method="POST">
-      <label for="role">Name: </label>
-      <input type="text" name="name" id="name">
-      <label for="role">Surname: </label>
-      <input type="text" name="surname" id="surname">
-      <label for="role">Role: </label>
-      <select name="userType" id="role">
-        <option value="admin">Admin</option>
-        <option value="moderator">Moderator</option>
+  <div class="content">
+    <div class="user-management">
+      <h1>Change user data</h1>
+      <select name="user" id="user">
+        <% users.forEach(user => { %>
+        <option value="<%= user._id %>"><%= user.name %></option>
+        <% }) %>
       </select>
-      <input type="hidden" name="id" id="id" value="">
-      <input class="button green" type="submit" value="Save">
-    </form>
-    <div class="delete-user">
-      <p class="message"></p>
-      <button class="button red " id="delete">Delete</button>
-    </div>
+      <form class="management-profile" action="/user/profile" method="POST">
+        <label for="role">Name: </label>
+        <input type="text" name="name" id="name" value="<%= firstUser.name %>">
+        <label for="role">Surname: </label>
+        <input type="text" name="surname" id="surname" value="<%= firstUser.surname %>">
+        <label for=" role">Role: </label>
+        <select name="userType" id="role">
+          <% if (firstUser.userType === 'admin') { %>
+          <option value="admin" selected>Admin</option>
+          <option value="moderator">Moderator</option>
+          <% } else { %>
+          <option value="admin">Admin</option>
+          <option value="moderator" selected>Moderator</option>
+          <% } %>
+        </select>
+        <input type="hidden" name="id" id="id" value="<%= firstUser._id %>">
+        <input class="button green" type="submit" value="Save">
+      </form>
+      <div class="delete-user">
+        <p class="message"></p>
+        <button class="button red " id="delete">Delete</button>
+      </div>
 
+    </div>
   </div>
+
   <script type="text/javascript">
     const form = document.querySelector('form');
     const selectUser = document.getElementById('user');
@@ -60,7 +65,7 @@
       // console.log(id.value);
       fetch(`/user/${id.value}`, {
         method: "DELETE"
-      }).then(result => conosle.log(result));
+      }).then(result => console.log(result));
     })
 
 
