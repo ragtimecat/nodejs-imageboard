@@ -16,7 +16,9 @@ module.exports = function (req, res, next) {
     req.user = decoded.user;
     next();
   } catch (err) {
+    res.clearCookie('token');
     return res.redirect(302, '/user/auth-form');
+    // return res.render('404', { title: 'Error 404' });
     // res.status(401).json({ msg: 'Token is not valid' });
   }
 }

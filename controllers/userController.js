@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Room = require('../models/room');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../config/jwt.json');
@@ -187,7 +188,8 @@ const staff_management_get = async (req, res) => {
 
 const staff_chat_get = async (req, res) => {
   const user = await User.findById(req.user.id);
-  res.render('staff-chat', { title: 'Chat', user });
+  const rooms = await Room.find();
+  res.render('staff-chat', { title: 'Chat', user, rooms });
 }
 
 

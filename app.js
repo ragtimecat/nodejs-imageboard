@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Board = require('./models/board');
-const User = require('./models/user');
 const boardRoutes = require('./routes/boardRoutes');
 const threadRoutes = require('./routes/threadRoutes');
 const messageRoutes = require('./routes/messageRoutes');
@@ -11,9 +10,6 @@ const bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 const http = require('http');
 const chat = require('./chat');
-const auth = require('./middleware/auth');
-
-const formatMessage = require('./utils/chatMessages');
 
 
 const upload = require('./middleware/fileUpload');
@@ -60,36 +56,6 @@ app.get('/', async (req, res) => {
 //socketio chat route
 //fires only when user gets a page with sockeio forntent lib(only /user/chat path
 chat(server);
-
-// const botName = 'The Board Bot';
-
-
-
-// io.on('connection', socket => {
-//   console.log('connected');
-
-//   const client = socket.client;
-//   console.log(client.request.headers.cookie);
-//   // message for connecting user
-//   socket.emit('message', formatMessage(botName, `Welcome to the chat, user`));
-
-//   //message for everyone else in chat
-//   socket.broadcast.emit('message', formatMessage(botName, `A user has joined the chat`));
-
-//   socket.on('disconnect', () => {
-//     console.log('disconnected');
-//     io.emit('message', formatMessage('user', 'A user has left the chat'));
-//   })
-
-//   socket.on('chatMessage', (message, name) => {
-//     console.log(client.request);
-//     io.emit('message', formatMessage(name, message));
-//   });
-
-// })
-
-
-
 
 //admin routes
 app.use('/user', userRoutes);

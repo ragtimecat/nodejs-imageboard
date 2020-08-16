@@ -1,4 +1,3 @@
-const { regex } = require("uuidv4")
 
 module.exports = function (cookie) {
   const regex = /token=[a-zA-Z0-9._]*/;
