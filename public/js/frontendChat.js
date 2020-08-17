@@ -16,8 +16,9 @@ socket.on('message', message => {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 })
 
-socket.on('userIsOnline', username => {
-  userOnline(username);
+socket.on('roomusers', users => {
+  console.log(users);
+  usersOnline(users);
 })
 
 chatForm.addEventListener('submit', e => {
@@ -51,8 +52,12 @@ function outputMessage(message) {
   chatMessages.appendChild(div);
 }
 
-function userOnline(username) {
-  const li = document.createElement('li');
-  li.innerHTML = `<div class="online"></div>${username}`;
-  onlineUsers.appendChild(li);
+function usersOnline(users) {
+  const ul = document.createElement('ul');
+  users.forEach(user => {
+    const li = document.createElement('li');
+    li.innerHTML = `<div class="online"></div>${user.name}`;
+    ul.appendChild(li);
+  })
+  onlineUsers.innerHTML = ul.innerHTML;
 }

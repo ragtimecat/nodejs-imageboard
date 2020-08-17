@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('./config/jwt.json');
 const User = require('./models/user');
-const { formatMessage, chatAuth } = require('./utils/chatUtils');
+const { formatMessage, userJoin, getRoomUsers, userLeave, getCurrentUser } = require('./utils/chatUtils');
 
 const socketio = require('socket.io');
 // const chatAuth = require('./utils/chatAuth');
@@ -17,43 +17,38 @@ module.exports = function (server) {
   // console.log(chatAuth());
 
   io.on('connection', async socket => {
-    const decoded = chatAuth(socket);
-    let user = await User.findById(decoded.user.id, { name: 1, surname: 1, userType: 1 });
-    //user is mongoose object by default
-    user = user.toObject();
-    user.nickname = `${user.name} ${user.surname}`;
-
-    socket.on('joinRoom', room => {
-      socket.leave(user.room);
-      socket.join(room);
-      user.room = room;
-      console.log(user);
+    socket.on('joinRoom', async room => {
+      const user = await userJoin(socket, room);
+      socket.join(user.room);
 
       socket.emit('message', formatMessage(botName, `Welcome to ${user.room}`));
 
       //message for everyone else in chat
-      socket.broadcast.to(user.room).emit('message', formatMessage(botName, `A ${user.nickname} has joined the ${user.room}`));
+      socket.broadcast.to(user.room).emit('message', formatMessage(botName, `A ${user.name} has joined ${user.room}`));
 
-      //finish join room mechanism
-
+      //sends list of users
+      const users = await getRoomUsers(user.room);
+      io.to(user.room).emit('roomusers', users);
     })
 
-
-
-
-    //message that user is online
-    io.emit('userIsOnline', user.nickname);
-
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
       console.log('disconnected');
-      io.emit('message', formatMessage(botName, `A ${user.nickname} has left the ${user.room}`));
-      io.emit('userIsOffline', user.nickname);
+
+      const user = await userLeave(socket.id);
+
+      if (user) {
+
+        io.to(user.room).emit('message', formatMessage(botName, `A ${user.name} has left the chat`));
+        const users = await getRoomUsers(user.room);
+        io.to(user.room).emit('roomusers', users);
+      }
+      // io.emit('message', formatMessage(botName, `A ${user.nickname} has left the ${user.room}`));
+
     })
-
-
 
     socket.on('chatMessage', async (message) => {
-      io.to(user.room).emit('message', formatMessage(`${user.nickname}`, message));
+      const user = await getCurrentUser(socket.id);
+      io.to(user.room).emit('message', formatMessage(`${user.name}`, message));
     });
 
   })
