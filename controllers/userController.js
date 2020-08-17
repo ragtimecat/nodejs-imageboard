@@ -59,13 +59,13 @@ const auth_post = async (req, res) => {
     const payload = {
       user: {
         id: user._id,
-        role: user.userType
+        role: user.role
       }
     }
 
     console.log(payload);
     jwt.sign(payload, jwtConfig.jwtSecret, {
-      expiresIn: 3600,
+      expiresIn: 360000,
     }, (err, token) => {
       if (err) throw err;
       res.cookie('token', token, {
@@ -88,9 +88,9 @@ const signup_form_get = (req, res) => {
 }
 
 
-//signup user with login, password and userType params
+//signup user with login, password and role params
 const signup_post = async (req, res) => {
-  const { login, password, name, surname, userType } = req.body;
+  const { login, password, name, surname, role } = req.body;
   if (login == '') {
     return res.status(400).json({ msg: 'no login' });
   }
@@ -109,19 +109,19 @@ const signup_post = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     const encrypted_password = await bcrypt.hash(password, salt);
-    const new_user = new User({ login, password: encrypted_password, name, surname, userType });
+    const new_user = new User({ login, password: encrypted_password, name, surname, role });
 
     await new_user.save()
 
     const payload = {
       user: {
         id: new_user._id,
-        role: new_user.userType
+        role: new_user.role
       }
     }
 
     jwt.sign(payload, jwtConfig.jwtSecret, {
-      expiresIn: 360000,
+      expiresIn: 3600000,
     }, (err, token) => {
       if (err) {
         throw err;
@@ -163,7 +163,7 @@ const user_profile_get = async (req, res) => {
 
 // update user profile
 const user_profile_post = async (req, res) => {
-  const { name, surname, userType } = req.body;
+  const { name, surname, role } = req.body;
   let id;
   if (typeof req.body.id !== 'undefined') {
     id = req.body.id;
@@ -171,8 +171,8 @@ const user_profile_post = async (req, res) => {
     id = req.user.id
   }
   try {
-    const user = await User.findByIdAndUpdate(id, { name, surname, userType });
-    res.render('user-profile', { title: 'Profile Panel', user: { name, surname, userType, ...user } });
+    const user = await User.findByIdAndUpdate(id, { name, surname, role });
+    res.render('user-profile', { title: 'Profile Panel', user: { name, surname, role, ...user } });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -182,14 +182,15 @@ const staff_management_get = async (req, res) => {
   //get all user ids and names
   const users = await User.find().select({ _id: 1, name: 1 });
   //get first user
-  const firstUser = await User.findOne().select({ _id: 1, name: 1, surname: 1, userType: 1 });
+  const firstUser = await User.findOne().select({ _id: 1, name: 1, surname: 1, role: 1 });
   res.render('staff-management', { title: 'Staff management page', users, firstUser })
 }
 
 const staff_chat_get = async (req, res) => {
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user.id, { name: 1, surname: 1 });
   const rooms = await Room.find();
-  res.render('staff-chat', { title: 'Chat', user, rooms });
+  const defaultRoom = rooms.filter(room => room.default === true);
+  res.render('staff-chat', { title: 'Chat', user, rooms, defaultRoom: defaultRoom[0] });
 }
 
 

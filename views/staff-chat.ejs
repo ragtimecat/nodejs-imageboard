@@ -4,12 +4,8 @@
   <%- include('./partials/admin-nav.ejs') %>
   <div class="chat-container">
     <header class="chat-header">
-      <h1>General</h1>
-      <select name="select-chat" id="select-chat">
-        <option value="general">General</option>
-        <option value="improvements">Improvements</option>
-        <option value="problems">Problems</option>
-      </select>
+      <h1 class="room-name"><%= defaultRoom.name %></h1>
+      <h3 class="username"><%= user.name %> <%= user.surname %></h3>
     </header>
     <main class="chat-main">
       <div class="chat-sidebar">

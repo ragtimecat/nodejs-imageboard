@@ -17,7 +17,7 @@
         <input type="text" name="surname" id="surname" value="<%= firstUser.surname %>">
         <label for=" role">Role: </label>
         <select name="userType" id="role">
-          <% if (firstUser.userType === 'admin') { %>
+          <% if (firstUser.role === 'admin') { %>
           <option value="admin" selected>Admin</option>
           <option value="moderator">Moderator</option>
           <% } else { %>

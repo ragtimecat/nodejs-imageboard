@@ -3,9 +3,13 @@ const chatForm = document.getElementById('chat-form');
 const chatMessages = document.querySelector('.chat-messages');
 const onlineUsers = document.querySelector('.users-online');
 const rooms = document.querySelectorAll('.room input[type=radio]');
-const chatTitle = document.querySelector('.chat-header h1');
+const chatTitle = document.querySelector('.chat-header .room-name');
+const username = document.querySelector('.chat-header .username');
+const defaultRoom = document.querySelector('.chat-header .room-name').innerHTML;
 
 const socket = io.connect('', { forceNew: true });
+
+joinRoom(defaultRoom);
 
 socket.on('message', message => {
   outputMessage(message);
@@ -26,8 +30,15 @@ chatForm.addEventListener('submit', e => {
 })
 
 rooms.forEach(room => room.addEventListener('click', e => {
-  chatTitle.innerHTML = e.target.id;
+  if (chatTitle.innerHTML !== e.target.id) {
+    chatTitle.innerHTML = e.target.id;
+    joinRoom(e.target.id);
+  }
 }));
+
+function joinRoom(room) {
+  socket.emit('joinRoom', room)
+}
 
 function outputMessage(message) {
   const div = document.createElement('div');

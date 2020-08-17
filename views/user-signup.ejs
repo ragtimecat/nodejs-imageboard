@@ -15,8 +15,8 @@
         <input type="text" name="name" id="name">
         <label for="Surname">Surname:</label>
         <input type="text" name="surname" id="surname">
-        <label for="user-type">User Type: </label>
-        <select name="user-type" id="user-type">
+        <label for="role">Role: </label>
+        <select name="role" id="role">
           <option value="admin" selected>Admin</option>
           <option value="moderator">Moderator</option>
         </select>
@@ -27,7 +27,7 @@
   <script type="text/javascript">
     const login = document.getElementById('login');
     const password = document.getElementById('password');
-    const userType = document.getElementById('user-type');
+    const role = document.getElementById('role');
     const name = document.getElementById('name');
     const surname = document.getElementById('surname');
     const form = document.querySelector('form');
@@ -66,7 +66,7 @@
             password: password.value,
             name: name.value,
             surname: surname.value,
-            userType: userType.value,
+            role: role.value,
           })
         })
           .then(async (result) => {
