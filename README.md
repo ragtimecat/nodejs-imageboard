@@ -10,7 +10,7 @@ TODO:\
 [x] Implement images in thread posts\
 [x] Show last 3(?) messages below the thread title message\
 [x] Implement login authentication for admin/moderator\
-[ ] Implement authorisation for admin/moderator\
+[x] Implement authorisation for admin/moderator\
+[x] Implement a staff chat via websockets\
 [ ] Build an admin panel to control threads/messages/boards\
-[ ] Implement a staff chat via websockets\
 [ ] Add plot for viewers/threads/messages statistic\
