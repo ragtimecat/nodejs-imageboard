@@ -19,7 +19,12 @@ const app = express();
 const server = http.createServer(app);
 
 // db connect
-mongoose.connect(db.dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(db.dbURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true
+})
   .then(result => server.listen(3000))
   .catch(err => console.log(err));
 

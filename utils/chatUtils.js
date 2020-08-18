@@ -1,8 +1,10 @@
 const moment = require('moment');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../config/jwt.json');
-const chatUser = require('../models/chatUser');
+const ChatUser = require('../models/chatUser');
 const User = require('../models/user');
+const ChatMessage = require('../models/chatMessages');
+const ChatRoom = require('../models/chatRoom');
 
 
 function formatMessage(username, message) {
@@ -29,7 +31,7 @@ async function userJoin(socket, room) {
   try {
     const decoded = jwt.verify(token, jwtConfig.jwtSecret);
 
-    let user = await chatUser.findOne({ userId: decoded.user.id });
+    let user = await ChatUser.findOne({ userId: decoded.user.id });
 
     if (!user) {
       user = await User.findById(decoded.user.id, { name: 1, surname: 1, role: 1 });
@@ -37,11 +39,12 @@ async function userJoin(socket, room) {
       user = user.toObject();
       user.nickname = `${user.name} ${user.surname}`;
 
-      const newUser = new chatUser({ socketId: socket.id, userId: user._id, name: user.nickname, role: user.role, room });
+      const newUser = new ChatUser({ socketId: socket.id, userId: user._id, name: user.nickname, role: user.role, room });
       user = await newUser.save();
+    } else {
+      //prob have to update socketid alongside with room
+      user = await ChatUser.findOneAndUpdate({ userId: decoded.user.id }, { socketId: socket.id, room }, { returnOriginal: false });
     }
-
-    user = await chatUser.findOneAndUpdate({ userId: decoded.user.id }, { socketId: socket.id })
     return user;
   } catch (error) {
     console.log(error);
@@ -49,19 +52,45 @@ async function userJoin(socket, room) {
 
 }
 
-async function getRoomUsers(room) {
-  const users = await chatUser.find({ room }, { name: 1, role: 1 });
-  return users;
+async function getRoomUsers(room, io) {
+  try {
+    let sockets = io.sockets.adapter.rooms[room];
+    sockets = Object.keys(sockets.sockets);
+    const users = await ChatUser.find({ socketId: { $in: sockets } }, { name: 1, role: 1 });
+    // const users = await ChatUser.find({ room }, { name: 1, role: 1 });
+    return users;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function userLeave(socketId) {
-  const user = await chatUser.findOneAndDelete({ socketId }, { name: 1, room: 1 });
+  const user = await ChatUser.findOneAndDelete({ socketId }, { name: 1, room: 1 });
   return user;
 }
 
 async function getCurrentUser(socketId) {
-  const user = await chatUser.findOne({ socketId }, { name: 1, room: 1 });
+  const user = await ChatUser.findOne({ socketId }, { name: 1, room: 1 });
   return user;
+}
+
+async function saveMessage(message, username, room) {
+  const targetRoom = await ChatRoom.findOne({ name: room }, { _id: 1 });
+  if (!targetRoom) {
+    return null;
+  }
+  const savedMessage = new ChatMessage({ message, username, room: targetRoom._id });
+  const newMessage = await savedMessage.save();
+
+  await ChatRoom.findOneAndUpdate({ name: room }, { $addToSet: { messages: newMessage._id } });
+}
+
+async function getLastMessages(room) {
+  const targetRoom = await ChatRoom.findOne({ name: room }, { _id: 1 });
+  let messages = await ChatMessage.find({ room: targetRoom._id }).sort({ createdAt: -1 }).limit(10);
+  //mongoose will return last 10 messages sorted descending, so we have to reverse the result
+  messages = messages.reverse();
+  return messages;
 }
 
 module.exports = {
@@ -70,5 +99,7 @@ module.exports = {
   userJoin,
   getCurrentUser,
   userLeave,
-  getRoomUsers
+  getRoomUsers,
+  saveMessage,
+  getLastMessages
 }

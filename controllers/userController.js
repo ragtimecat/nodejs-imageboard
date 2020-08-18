@@ -1,8 +1,9 @@
 const User = require('../models/user');
-const Room = require('../models/room');
+const ChatRoom = require('../models/chatRoom');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../config/jwt.json');
+const ChatUser = require('../models/chatUser');
 
 // functions
 
@@ -188,9 +189,17 @@ const staff_management_get = async (req, res) => {
 
 const staff_chat_get = async (req, res) => {
   const user = await User.findById(req.user.id, { name: 1, surname: 1 });
-  const rooms = await Room.find();
-  const defaultRoom = rooms.filter(room => room.default === true);
-  res.render('staff-chat', { title: 'Chat', user, rooms, defaultRoom: defaultRoom[0] });
+  const rooms = await ChatRoom.find();
+  const chatUser = await ChatUser.findOne({ userId: user._id }, { room: 1 });
+  let defaultRoom;
+  if (!chatUser) {
+    chatUser = rooms.filter(room => room.default === true);
+    defaultRoom = chatUser.name;
+  } else {
+    defaultRoom = chatUser.room;
+  }
+
+  res.render('staff-chat', { title: 'Chat', user, rooms, defaultRoom });
 }
 
 

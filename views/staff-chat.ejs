@@ -4,7 +4,7 @@
   <%- include('./partials/admin-nav.ejs') %>
   <div class="chat-container">
     <header class="chat-header">
-      <h1 class="room-name"><%= defaultRoom.name %></h1>
+      <h1 class="room-name"><%= defaultRoom %></h1>
       <h3 class="username"><%= user.name %> <%= user.surname %></h3>
     </header>
     <main class="chat-main">
@@ -16,7 +16,7 @@
         <div class="rooms">
           <% rooms.forEach(room => { %>
           <div class="room">
-            <% if (room.default === true) { %>
+            <% if (room.name === defaultRoom) { %>
             <input type="radio" name="room" id="<%= room.name %>" checked>
             <% } else { %>
             <input type="radio" name="room" id="<%= room.name %>">
@@ -33,12 +33,7 @@
           <div class="online"></div> Users Online
         </h3>
         <ul class="users-online">
-          <li>
-            <div class="online"></div>Peter
-          </li>
-          <li>
-            <div class="online"></div>Jamie
-          </li>
+
         </ul>
         <h3>
           <div class="offline"></div> Users Offline

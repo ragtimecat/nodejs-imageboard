@@ -10,12 +10,16 @@ const roomSchema = new Schema({
   default: {
     type: Boolean,
     required: true
-  }
+  },
+  messages: [{
+    type: Schema.Types.ObjectId,
+    ref: 'chatMessage'
+  }]
   // userType: {
   //   type: String,
   //   required: true
   // }
 });
 
-const Room = mongoose.model('Room', roomSchema);
-module.exports = Room;
+const ChatRoom = mongoose.model('ChatRoom', roomSchema);
+module.exports = ChatRoom;

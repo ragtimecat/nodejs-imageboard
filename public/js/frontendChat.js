@@ -21,6 +21,13 @@ socket.on('roomusers', users => {
   usersOnline(users);
 })
 
+socket.on('lastMessages', messages => {
+  console.log(messages);
+  messages.forEach(message => {
+    outputMessage({ username: message.username, message: message.message, time: message.createdAt });
+  })
+})
+
 chatForm.addEventListener('submit', e => {
   e.preventDefault();
   const message = e.target.elements.msg.value;
@@ -33,9 +40,15 @@ chatForm.addEventListener('submit', e => {
 rooms.forEach(room => room.addEventListener('click', e => {
   if (chatTitle.innerHTML !== e.target.id) {
     chatTitle.innerHTML = e.target.id;
+    leaveRoom();
     joinRoom(e.target.id);
   }
 }));
+
+function leaveRoom() {
+  chatMessages.innerHTML = '';
+  socket.emit('leaveRoom');
+}
 
 function joinRoom(room) {
   socket.emit('joinRoom', room)
