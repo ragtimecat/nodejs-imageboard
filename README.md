@@ -12,5 +12,5 @@ TODO:\
 [x] Implement login authentication for admin/moderator\
 [x] Implement authorisation for admin/moderator\
 [x] Implement a staff chat via websockets\
-[ ] Build an admin panel to control threads/messages/boards\
+[x] Build an admin panel to control threads/messages/boards\
 [ ] Add plot for viewers/threads/messages statistic\
